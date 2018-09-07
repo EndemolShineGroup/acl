@@ -1,0 +1,6 @@
+- Add method `doesAny(roles:string[])`;
+- Change how `allow.toExtend` to be a writeable method; (in order to remove 1 grantObj);
+- Remove `assumedGrants`;
+- Add method `getRoles(): string[]`;
+- Add method `getPermissions(role: string): { [key: string]: { dev: boolean, staging:boolean, prod:boolean }}[]`;
+- Add more tests to cover `grants not set`; // Add all the call when grant not set
