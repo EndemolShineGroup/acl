@@ -32,33 +32,33 @@ const grantObj = {
 # API:
 `Setting grants`
 ```
-    const ac = new AccessControl(grantsObj);
-    
-    or
+const ac = new AccessControl(grantsObj);
 
-    ac.setGrants();
+or
+
+ac.setGrants();
 ```
- `Checking permissions`
- ```
-  ac.does(`${role}`).havePermission(`${permission}`).for(${Stage});
+`Checking permissions`
+```
+ac.does(`${role}`).havePermission(`${permission}`).for(${Stage});
 ```
 `Granting permission`
 ```
-  ac.grant(`${role}`).permission(`${permission}`).for(${Stage[]});
+ac.grant(`${role}`).permission(`${permission}`).for(${Stage[]});
 ```
 `Denying permission`
 ```
-  ac.deny(`${role}`).permission(`${permission}`).for(${Stage[]});
+ac.deny(`${role}`).permission(`${permission}`).for(${Stage[]});
 ```
 `Extending permission`
 ```
-  ac.allow(`${role}`).toExtend(`${role2}`);
+ac.allow(`${role}`).toExtend(`${role2}`);
 ```
 `Removing role`
 ```
-  ac.remove(`${role}`);
+ac.remove(`${role}`);
 ```
 `Retrieving grants`
 ```
-  ac.getGrants();
+ac.getGrants();
 ```
