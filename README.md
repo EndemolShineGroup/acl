@@ -32,12 +32,11 @@ const grantObj = {
 # API:
 `Setting grants`
 ```
-const ac = new AccessControl(grantsObj);
+const ac = new AccessControl(grantsObj); // constructor
 
 or
 
-const ac = new AccessControl();
-ac.setGrants();
+ac.setGrants(grantsObj); // any time
 ```
 `Checking permissions`
 ```
