@@ -36,6 +36,7 @@ const ac = new AccessControl(grantsObj);
 
 or
 
+const ac = new AccessControl();
 ac.setGrants();
 ```
 `Checking permissions`
