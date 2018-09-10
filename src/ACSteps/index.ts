@@ -7,8 +7,12 @@ import AllowStep from './AllowStep';
 import DoesStep from './DoesStep';
 import HaveStep from './HaveStep';
 import PermissionCheckStep from './PermissionCheckStep';
+import DoesAnyStep from './DoesAnyStep';
+import HaveAnyStep from './HaveAnyStep';
 
 export {
+  HaveAnyStep,
+  DoesAnyStep,
   PermissionCheckStep,
   HaveStep,
   DoesStep,
