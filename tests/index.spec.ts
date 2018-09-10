@@ -225,4 +225,18 @@ describe('Access Control', () => {
 
     expect(console.error).to.be.called;
   });
+
+   it('should create a new role with new permissions even if we don`t set initial object', () => {
+    ACWithoutGrants.grant('NEW_ROLE').permission('NEW_PERMISSION').for('dev', 'staging')
+
+    expect(ACWithoutGrants.getRoles()).to.deep.include({
+      NEW_ROLE: {
+        NEW_PERMISSION: {
+            dev: true,
+            staging: true,
+            prod: false,
+        },
+      }
+    });
+  });
 });
