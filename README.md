@@ -1,24 +1,36 @@
 # package-accesscontrol
 AccessControl package in typescript with tests
 
+# install
+`yarn add esgt-access-control`
+or
+`npm i esgt-access-control --save`
+
 # Types
-  `enum Stage { dev, staging, prod }`
+  ```
+  ACGrants {
+    // [env]: boolean
+    [key: string]: boolean;
+  }
+  ```
 
   ```
-  ACGrantsObject {
-    [key: string] : {
-      [key: string] : {
-        dev: boolean,
-        staging: boolean,
-        prod: boolean,
-      }
-    }
+  ACPermissions {
+    // [job] : envs
+    [key: string]: ACGrants;
   }
-```
+  ```
+
+  ```
+  ACRoles {
+    //[role] : jobs
+    [key: string] : ACPermissions;
+  }
+  ```
 
 # Data example
 ```
-const grantObj = {
+const rolesObj = {
   User: {
     GetUsers: {
       dev: true,
@@ -30,35 +42,43 @@ const grantObj = {
 ```
 
 # API:
-`Setting grants`
+`Setting roles`
 ```
-const ac = new AccessControl(grantsObj); // constructor
+const ac = new AccessControl(rolesObj); // constructor
 
 or
 
-ac.setGrants(grantsObj); // any time
+ac.setRoles(rolesObj); // any time
 ```
-`Checking permissions`
+`Checking permissions (boolean)`
 ```
-ac.does(`${role}`).havePermission(`${permission}`).for(${Stage});
+ac.does(`${role}`).havePermission(`${permission}`).for(`${stage}`);
 ```
-`Granting permission`
+`Granting permission (void)`
 ```
-ac.grant(`${role}`).permission(`${permission}`).for(${Stage[]});
+ac.grant(`${role}`).permission(`${permission}`).for(`${stage[]}`);
 ```
-`Denying permission`
+`Denying permission (void)`
 ```
-ac.deny(`${role}`).permission(`${permission}`).for(${Stage[]});
+ac.deny(`${role}`).permission(`${permission}`).for(`${stage[]}`);
 ```
-`Extending permission`
+`Extending permission (void)`
 ```
 ac.allow(`${role}`).toExtend(`${role2}`);
 ```
-`Removing role`
+`Removing role (void)`
 ```
 ac.remove(`${role}`);
 ```
-`Retrieving grants`
+`Retrieving roles obj (ACRoles)`
 ```
-ac.getGrants();
+ac.getRoles();
+```
+`Retrieving roles list (string[])`
+```
+ac.getRolesList();
+```
+`Retrieving permissions for role (ACPermissions)`
+```
+ac.getPermissions(role: string);
 ```
