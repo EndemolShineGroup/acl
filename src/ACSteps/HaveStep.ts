@@ -1,8 +1,7 @@
 import { ACStep, PermissionCheckStep } from './';
-import { Stage } from '../types';
 
 export default class HaveStep extends ACStep{
-  for(environment: Stage):boolean {
+  for(environment: string):boolean {
     return new PermissionCheckStep({...this.query, environment}, this.parent).hasPermission();
   }
 }
