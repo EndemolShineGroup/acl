@@ -1,7 +1,8 @@
-import { cloneDeep, omit, isEmpty } from 'lodash';
+import { cloneDeep, omit, isEmpty, map } from 'lodash';
 
 // ACSteps
 import {
+  DoesAnyStep,
   PermissionCheckStep,
   HaveStep,
   DoesStep,
@@ -15,47 +16,55 @@ import {
 
 
 // Types
-import { Stage, ACGrantsObject, GrantQuery } from './types';
+import { ACRoles, GrantQuery, ACPermissions } from './types';
 
 export default class AccessControl {
 
-  private grants: ACGrantsObject;
+  private roles: ACRoles = {};
 
-  private assumedGrants: ACGrantsObject;
+  private modifiedRoles: ACRoles = {};
 
-  private modifiedGrants: ACGrantsObject;
-
-  constructor(grants?: ACGrantsObject) {
-    if (grants) {
-      this.grants         = grants;
-      this.assumedGrants  = grants;
-      this.modifiedGrants = grants;
+  constructor(roles?: ACRoles) {
+    if (roles) {
+      this.roles         = roles;
+      this.modifiedRoles = roles;
     }
   }
 
-  getGrants(internal: ACStep | null = null): ACGrantsObject {
-    if (!this.grants) {
+  getRoles(internal: ACStep | null = null): ACRoles {
+    if (!this.hasRoles(this)) {
       console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return {};
     }
 
-    // If it's an internal call done by a step we want assumedGrants,
-    // if the user calls it we send back modifiedGrants
-    if (internal)
-      return cloneDeep(this.assumedGrants);
-    else
-      return cloneDeep(this.modifiedGrants);
+    return cloneDeep(this.modifiedRoles);
   }
 
-  setGrants(grants: ACGrantsObject):void {
-    this.grants         = grants;
-    this.assumedGrants  = grants;
-    this.modifiedGrants = grants;
+  getRolesList(): string[] {
+    return Object.keys(this.modifiedRoles);
+  }
+
+  getPermissions(role: string): ACPermissions | null {
+    if (isEmpty(this.modifiedRoles[role])) {
+      console.error(`AccessControl Error: ${role} role does not exist. Can't get permissions`);
+      return null
+    }
+
+    return this.modifiedRoles[role];
+  }
+
+  setRoles(grants: ACRoles):void {
+    this.roles         = grants;
+    this.modifiedRoles = grants;
   }
 
   // Steps
   does(role: string):DoesStep {
     return new DoesStep({role}, this);
+  }
+
+  doesAny(roles: string[]):DoesAnyStep {
+    return new DoesAnyStep({role: '', roles}, this);
   }
 
   allow(role: string):AllowStep {
@@ -71,31 +80,20 @@ export default class AccessControl {
   }
 
   remove(role: string):void {
-    if (!this.grants) {
+    if (!this.hasRoles(this)) {
       console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return;
     }
 
-    if (!this.assumedGrants[role]) {
-      console.error(`AccessControl Error: ${role} role does not exist in grants and cannot be removed.`);
-      return;
-    }
-
-    this.assumedGrants  = omit(this.assumedGrants, [role]);
-    this.modifiedGrants = omit(this.modifiedGrants, [role]);
+    this.modifiedRoles = omit(this.modifiedRoles, [role]);
   }
 
   // Internal methods
-  assumeGrants(grants: ACGrantsObject, internal: ACStep):void {
-    this.assumedGrants  = grants;
+  modifyRoles(grants: ACRoles, internal: ACStep):void {
+    this.modifiedRoles = grants;
   }
 
-  modifyGrants(grants: ACGrantsObject, internal: ACStep):void {
-    this.modifiedGrants = grants;
-    this.assumeGrants(grants, internal);
-  }
-
-  hasGrants(internal: ACStep): boolean {
-    return isEmpty(this.grants);
+  hasRoles(internal: ACStep | AccessControl): boolean {
+    return !isEmpty(this.roles);
   }
 }
