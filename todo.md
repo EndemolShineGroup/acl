@@ -1,0 +1,1 @@
+- Create pre process to copy CHANGE_LOG.md into README.md
