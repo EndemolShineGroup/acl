@@ -5,7 +5,7 @@ import { each, includes } from 'lodash';
 
 export default class GrantPermissionStep extends ACStep {
   for(...stages: string[]): void {
-    const roles: ACRoles = this.parent.getRoles();
+    const roles: ACRoles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
       roles[this.query.role!] = {};
