@@ -10,7 +10,7 @@ export default class DenyPermissionStep extends ACStep {
       return;
     }
 
-    const roles: ACRoles = this.parent.getRoles();
+    const roles: ACRoles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
       console.error(`AccessControl Error: Cannot deny permissions for ${this.query.role} role because it could not be found in grants`);
