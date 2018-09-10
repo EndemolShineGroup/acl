@@ -1,14 +1,22 @@
 {
-  "name": "ESGTAccessControl",
-  "description": "Endemol Shine Group Technology Access Control",
-  "version": "0.1.0",
-  "private": true,
+  "name": "esgt-access-control",
+  "description": "ESG Tech Access Control",
+  "version": "0.0.2",
+  "private": false,
+  "author": {
+    "name": "Cai Leao",
+    "url": "https://github.com/cainaleaouk"
+  },
   "dependencies": {
+    "@types/lodash": "^4.14.116",
     "lodash": "^4.17.10",
     "typescript": "^3.0.3"
   },
   "scripts": {
-    "test": "mocha -r ts-node/register tests/*.spec.ts"
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "test": "mocha -r ts-node/register tests/*.spec.ts",
+    "integration": "node tests/dist_integration.js"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
