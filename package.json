@@ -1,7 +1,7 @@
 {
   "name": "esgt-access-control",
   "description": "ESG Tech Access Control",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "author": {
     "name": "Cai Leao",
@@ -16,7 +16,8 @@
     "build": "tsc",
     "build:watch": "tsc --watch",
     "test": "mocha -r ts-node/register tests/*.spec.ts",
-    "integration": "node tests/dist_integration.js"
+    "integration": "node tests/dist_integration.js",
+    "package": "yarn run test && yarn run build && yarn run integration"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
