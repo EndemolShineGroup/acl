@@ -26,7 +26,9 @@ const AccessControl = require('../dist/src').default;
  ac.grant('Test').permission('GetUsers').for('prod');
  console.log(ac.does('Test').havePermission('GetUsers').for('prod'));
 
+ console.error('Success: Simple integration test passing!');
+
 } catch (err) {
- console.error('There seems to be a problem with the distribution. Have you run yarn build?');
+ console.error('Failure: There seems to be a problem with the distribution. Have you run yarn build?');
  console.error(err);
 }
