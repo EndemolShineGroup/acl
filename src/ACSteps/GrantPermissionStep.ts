@@ -1,35 +1,28 @@
 import { ACStep } from './';
-import { Stage } from '../types';
+import { ACRoles } from '../types';
 
 import { each, includes } from 'lodash';
 
 export default class GrantPermissionStep extends ACStep {
-  for(...stages: Stage[]): void {
-    if (this.parent.hasGrants(this)) {
-      console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
-      return;
+  for(...stages: string[]): void {
+    const roles: ACRoles = this.parent.getRoles();
+
+    if (!roles[this.query.role!]) {
+      roles[this.query.role!] = {};
     }
 
-    const grants = this.parent.getGrants();
-
-    if (!grants[this.query.role!]) {
-      grants[this.query.role!] = {};
-    }
-
-    if (!grants[this.query.role!][this.query.permission!]) {
-      grants[this.query.role!][this.query.permission!] = {
+    if (!roles[this.query.role!][this.query.permission!]) {
+      roles[this.query.role!][this.query.permission!] = {
         dev: false,
         staging: false,
         prod: false,
       };
     }
 
-    each(Object.keys(Stage), (stage, index) => {
-      if (includes(stages, Stage[stage])) {
-        grants[this.query.role!][this.query.permission!][stage] = true;
-      }
+    each(stages, (stage: string) => {
+      roles[this.query.role!][this.query.permission!][stage] = true;
     });
 
-    this.parent.modifyGrants(grants, this);
+    this.parent.modifyRoles(roles, this);
   }
 }
