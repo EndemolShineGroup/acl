@@ -20,6 +20,8 @@ import { ACRoles, GrantQuery, ACPermissions } from './types';
 
 export default class AccessControl {
 
+  /* Obs: Maybe we can remove it, it's currently here just to keep a reference to original roles passed by the use
+    I've left there because I thought in the future we could have a reset functionality */
   private roles: ACRoles = {};
 
   private modifiedRoles: ACRoles = {};
@@ -32,7 +34,7 @@ export default class AccessControl {
   }
 
   getRoles(internal: ACStep | null = null): ACRoles {
-    if (!this.hasRoles(this)) {
+    if (!this.hasRoles(this) && !internal) {
       console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return {};
     }
@@ -89,11 +91,11 @@ export default class AccessControl {
   }
 
   // Internal methods
-  modifyRoles(grants: ACRoles, internal: ACStep):void {
-    this.modifiedRoles = grants;
+  modifyRoles(roles: ACRoles, internal: ACStep):void {
+    this.modifiedRoles = roles;
   }
 
   hasRoles(internal: ACStep | AccessControl): boolean {
-    return !isEmpty(this.roles);
+    return !isEmpty(this.modifiedRoles);
   }
 }
