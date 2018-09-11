@@ -13,7 +13,7 @@ export default class AllowStep extends ACStep {
     const roles: ACRoles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
-      // console.error(`AccessControl Error: Cannot extend ${this.query.role} role because it could not be found in roles`);
+      console.log(`AccessControl Warning: ${this.query.role} does not exist and will be created`);
       // return;
       roles[this.query.role!] = {};
     }
