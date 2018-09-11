@@ -13,8 +13,9 @@ export default class AllowStep extends ACStep {
     const roles: ACRoles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
-      console.error(`AccessControl Error: Cannot extend ${this.query.role} role because it could not be found in roles`);
-      return;
+      // console.error(`AccessControl Error: Cannot extend ${this.query.role} role because it could not be found in roles`);
+      // return;
+      roles[this.query.role!] = {};
     }
 
     if (!roles[anotherRole]) {
@@ -25,9 +26,18 @@ export default class AllowStep extends ACStep {
     const primaryRolePermissions:   ACPermissions = roles[this.query.role!];
     const secondaryRolePermissions: ACPermissions = roles[anotherRole];
 
-    each(primaryRolePermissions, (grants: ACGrants, permission: string) => {
+    each(secondaryRolePermissions, (grants: ACGrants, permission: string) => {
       if (isEqual(primaryRolePermissions[permission], secondaryRolePermissions[permission])) {
         return;
+      }
+
+      // this is in case we are creating a new role via `allow.toExtend`
+      if (!primaryRolePermissions[permission]) {
+        primaryRolePermissions[permission] = {
+          dev: false,
+          staging: false,
+          prod: false,
+        };
       }
 
       each(grants, (bool: boolean, grant: string) => {
