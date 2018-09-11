@@ -121,6 +121,47 @@ describe('Access Control', () => {
       });
   });
 
+  it('should `console.error` when trying to extend nonexistent role and role to keep the same', () => {
+    ACWithGrants.allow('Dev').toExtend('Text');
+
+    expect(console.error).to.be.called;
+
+    // Role should not mutate if the error occurs
+    expect(ACWithGrants.getRoles()).to.deep.include({
+      Dev: {
+        GetUsers: {
+            dev: true,
+            staging: true,
+            prod: true,
+        },
+        SaveUsers: {
+            dev: true,
+            staging: true,
+            prod: false,
+        }
+      }
+    });
+  });
+
+  it('extending NEW role 1 should have all permissions existing role 2 has', () => {
+    ACWithGrants.allow('Test').toExtend('Dev');
+
+    expect(ACWithGrants.getRoles()).to.deep.include({
+      Test: {
+        GetUsers: {
+            dev: true,
+            staging: true,
+            prod: true,
+        },
+        SaveUsers: {
+            dev: true,
+            staging: true,
+            prod: false,
+        }
+      }
+    });
+  });
+
   it('extending role 1 should have all permissions role 2 has', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
@@ -137,7 +178,7 @@ describe('Access Control', () => {
     expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).to.be.false
   });
 
-   it('extending role 1 should have all permissions role 2 has', () => {
+  it('extending role 1 should have all permissions role 2 has', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
     expect(ACWithGrants.getRoles()).to.deep.include({
