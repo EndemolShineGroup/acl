@@ -1,4 +1,4 @@
-import { each, includes } from 'lodash';
+import { each } from 'lodash';
 
 import { Roles } from '../types';
 import Step from './Step';
@@ -15,8 +15,8 @@ export default class GrantPermissionStep extends Step {
     if (!roles[this.query.role!][this.query.permission!]) {
       roles[this.query.role!][this.query.permission!] = {
         dev: false,
-        staging: false,
         prod: false,
+        staging: false,
       };
     }
 
