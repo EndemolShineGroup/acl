@@ -3,7 +3,6 @@ import { each } from 'lodash';
 import { Roles } from '../types';
 import Step from './Step';
 
-
 export default class GrantPermissionStep extends Step {
   for(...stages: string[]): void {
     const roles: Roles = this.parent.getRoles(this);

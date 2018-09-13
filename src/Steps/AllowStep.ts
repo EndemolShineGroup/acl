@@ -5,9 +5,11 @@ import { Grants, Permissions, Roles } from '../types';
 import Step from './Step';
 
 export default class AllowStep extends Step {
-  toExtend(anotherRole: string):void {
+  toExtend(anotherRole: string): void {
     if (!this.parent.hasRoles(this)) {
-      throw new AccessControlError(`AccessControl setup incorrectly. Please set grants before using it`);
+      throw new AccessControlError(
+        `AccessControl setup incorrectly. Please set grants before using it`,
+      );
     }
 
     const roles: Roles = this.parent.getRoles(this);
@@ -20,14 +22,21 @@ export default class AllowStep extends Step {
     }
 
     if (!roles[anotherRole]) {
-      throw new AccessControlError(`Cannot extend ${anotherRole} role because it could not be found in roles`);
+      throw new AccessControlError(
+        `Cannot extend ${anotherRole} role because it could not be found in roles`,
+      );
     }
 
-    const primaryRolePermissions:   Permissions = roles[this.query.role!];
+    const primaryRolePermissions: Permissions = roles[this.query.role!];
     const secondaryRolePermissions: Permissions = roles[anotherRole];
 
     each(secondaryRolePermissions, (grants: Grants, permission: string) => {
-      if (isEqual(primaryRolePermissions[permission], secondaryRolePermissions[permission])) {
+      if (
+        isEqual(
+          primaryRolePermissions[permission],
+          secondaryRolePermissions[permission],
+        )
+      ) {
         return;
       }
 
@@ -46,7 +55,8 @@ export default class AllowStep extends Step {
           return;
         }
 
-        primaryRolePermissions[permission][grant] = secondaryRolePermissions[permission][grant];
+        primaryRolePermissions[permission][grant] =
+          secondaryRolePermissions[permission][grant];
       });
     });
 

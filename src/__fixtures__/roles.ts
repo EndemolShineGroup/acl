@@ -11,7 +11,7 @@ const GrantsObj: Roles = {
       dev: false,
       staging: false,
       prod: false,
-    }
+    },
   },
   Admin: {
     GetUsers: {
@@ -23,7 +23,7 @@ const GrantsObj: Roles = {
       dev: true,
       staging: true,
       prod: true,
-    }
+    },
   },
   Dev: {
     GetUsers: {
@@ -35,8 +35,8 @@ const GrantsObj: Roles = {
       dev: true,
       staging: true,
       prod: false,
-    }
-  }
+    },
+  },
 };
 
 export default GrantsObj;

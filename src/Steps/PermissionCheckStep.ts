@@ -2,7 +2,7 @@ import { GrantQuery, Roles } from '../types';
 import Step from './Step';
 
 export default class PermissionCheckStep extends Step {
-  hasPermission():boolean {
+  hasPermission(): boolean {
     if (!this.parent.hasRoles(this)) {
       // console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return false;
