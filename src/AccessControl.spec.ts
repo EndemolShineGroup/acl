@@ -1,6 +1,7 @@
 import AccessControl from './AccessControl';
 
 import rolesFixture from './__fixtures__/roles';
+import AccessControlError from './Errors/AccessControlError';
 
 type ConsoleLog = (message?: any, ...optionalParams: any[]) => void;
 type ConsoleError = ConsoleLog;
@@ -10,19 +11,9 @@ describe('Access Control', () => {
   let ACWithGrants: AccessControl;
   let ACWithoutGrants: AccessControl;
 
-  let mockConsoleLog: jest.Mock<ConsoleLog>;
-  let mockConsoleError: jest.Mock<ConsoleError>;
-
   beforeEach(() => {
     ACWithGrants = new AccessControl(rolesFixture);
     ACWithoutGrants = new AccessControl();
-
-    mockConsoleError = jest.spyOn(global.console, 'error').mockImplementation(() => {
-      return;
-    });
-    mockConsoleLog = jest.spyOn(global.console, 'log').mockImplementation(() => {
-      return;
-    });
   });
 
   it('`getRoles()` should return the data passed in the constructor', () => {
@@ -35,10 +26,8 @@ describe('Access Control', () => {
     expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
-  it('`getRoles()` should console.error if no grantsObj has been passed to AccessControl', () => {
-    ACWithoutGrants.getRoles();
-
-    expect(mockConsoleError).toHaveBeenCalled();
+  it('`getRoles()` should throw an error if no grants were passed to AccessControl', () => {
+    expect(() => { ACWithoutGrants.getRoles(); }).toThrow(AccessControlError);
   });
 
   it('get permission should return false', () => {
@@ -83,10 +72,9 @@ describe('Access Control', () => {
     });
   });
 
-  it('should `console.error` when trying to extend nonexistent role and role to keep the same', () => {
-    ACWithGrants.allow('Dev').toExtend('Text');
+  it('should throw an AccessControlError when trying to extend a nonexistent role', () => {
 
-    expect(mockConsoleError).toHaveBeenCalled();
+    expect(() => { ACWithGrants.allow('Dev').toExtend('Text'); }).toThrow(AccessControlError);
 
     // Role should not mutate if the error occurs
     const result = ACWithGrants.getRoles();
@@ -109,7 +97,6 @@ describe('Access Control', () => {
     ACWithGrants.allow('Test').toExtend('Dev');
 
     const result = ACWithGrants.getRoles();
-    expect(mockConsoleLog).toHaveBeenCalled();
     expect(result).toHaveProperty('Test');
     expect(result.Test).toEqual({
       GetUsers: {
@@ -168,12 +155,11 @@ describe('Access Control', () => {
     expect(ACWithGrants.does('Admin').havePermission('SaveUsers').for('prod')).toBeFalsy()
   });
 
-  it('remove role should console.error and be inaccessible', () => {
+  // @TODO Shouldn't this just throw an error?
+  it('remove role should remove permissions as well', () => {
     ACWithGrants.remove('User');
 
     expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).toBeFalsy()
-
-    expect(mockConsoleError).toHaveBeenCalled();
   });
 
   it('should return true when calling `DoesAny` with User and Admin for SaveUser.prod', () => {
@@ -220,9 +206,7 @@ describe('Access Control', () => {
   });
 
   it('should return console.error and return null for non existent role', () => {
-    expect(ACWithGrants.getPermissions('Test')).toEqual(null);
-
-    expect(mockConsoleError).toHaveBeenCalled();
+    expect(() => { ACWithGrants.getPermissions('Test'); }).toThrow(AccessControlError);
   });
 
   it('should create a new role with new permissions even if we don`t set initial object', () => {
