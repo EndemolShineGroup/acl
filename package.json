@@ -24,6 +24,7 @@
   "scripts": {
     "build": "rimraf dist/ && tsc",
     "build:watch": "tsc --watch",
+    "lint": "tslint -p tsconfig.json -t codeFrame 'src/**/*.ts' -e 'src/**/*.spec.ts'",
     "pretest": "rimraf coverage/",
     "test": "jest --no-cache",
     "release": "yarn test && node scripts/bump_version.js && npm publish"
@@ -39,6 +40,8 @@
     "jest": "^23.6.0",
     "rimraf": "^2.6.2",
     "ts-jest": "^23.10.0-beta.1",
+    "tslint": "^5.11.0",
+    "tslint-config-esg": "github:EndemolShineGroup/tslint-config-esg",
     "typescript": "^3.0.3"
   }
 }
