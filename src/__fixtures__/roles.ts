@@ -1,4 +1,4 @@
-import { ACRoles } from '../../src/types';
+import { ACRoles } from '../types';
 
 const GrantsObj: ACRoles = {
   User: {

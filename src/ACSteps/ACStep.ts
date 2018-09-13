@@ -1,4 +1,4 @@
-import AccessControl from '../';
+import AccessControl from '../AccessControl';
 
 import { GrantQuery } from '../types';
 
