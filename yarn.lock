@@ -2370,6 +2370,10 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
+prettier@^1.14.2:
+  version "1.14.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.14.2.tgz#0ac1c6e1a90baa22a62925f41963c841983282f9"
+
 pretty-format@^23.6.0:
   version "23.6.0"
   resolved "https://registry.yarnpkg.com/pretty-format/-/pretty-format-23.6.0.tgz#5eaac8eeb6b33b987b7fe6097ea6a8a146ab5760"
@@ -2968,6 +2972,10 @@ tslib@^1.8.0, tslib@^1.8.1:
   resolved "https://codeload.github.com/EndemolShineGroup/tslint-config-esg/tar.gz/4d83ff3ce56ba03577c1169e7a379b19b15455a5"
   dependencies:
     tslint-eslint-rules "^5.3.1"
+
+tslint-config-prettier@^1:
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/tslint-config-prettier/-/tslint-config-prettier-1.15.0.tgz#76b9714399004ab6831fdcf76d89b73691c812cf"
 
 tslint-eslint-rules@^5.3.1:
   version "5.4.0"
