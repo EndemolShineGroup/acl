@@ -1,6 +1,7 @@
 import AccessControl from './AccessControl';
 
 import rolesFixture from './__fixtures__/roles';
+import AccessControlError from './Errors/AccessControlError';
 
 type ConsoleLog = (message?: any, ...optionalParams: any[]) => void;
 type ConsoleError = ConsoleLog;
@@ -10,19 +11,9 @@ describe('Access Control', () => {
   let ACWithGrants: AccessControl;
   let ACWithoutGrants: AccessControl;
 
-  let mockConsoleLog: jest.Mock<ConsoleLog>;
-  let mockConsoleError: jest.Mock<ConsoleError>;
-
   beforeEach(() => {
     ACWithGrants = new AccessControl(rolesFixture);
     ACWithoutGrants = new AccessControl();
-
-    mockConsoleError = jest.spyOn(global.console, 'error').mockImplementation(() => {
-      return;
-    });
-    mockConsoleLog = jest.spyOn(global.console, 'log').mockImplementation(() => {
-      return;
-    });
   });
 
   it('`getRoles()` should return the data passed in the constructor', () => {
@@ -35,10 +26,8 @@ describe('Access Control', () => {
     expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
-  it('`getRoles()` should console.error if no grantsObj has been passed to AccessControl', () => {
-    ACWithoutGrants.getRoles();
-
-    expect(mockConsoleError).toHaveBeenCalled();
+  it('`getRoles()` should throw an error if no grants were passed to AccessControl', () => {
+    expect(() => { ACWithoutGrants.getRoles(); }).toThrow(AccessControlError);
   });
 
   it('get permission should return false', () => {
@@ -83,10 +72,9 @@ describe('Access Control', () => {
     });
   });
 
-  it('should `console.error` when trying to extend nonexistent role and role to keep the same', () => {
-    ACWithGrants.allow('Dev').toExtend('Text');
+  it('should throw an AccessControlError when trying to extend a nonexistent role', () => {
 
-    expect(mockConsoleError).toHaveBeenCalled();
+    expect(() => { ACWithGrants.allow('Dev').toExtend('Text'); }).toThrow(AccessControlError);
 
     // Role should not mutate if the error occurs
     const result = ACWithGrants.getRoles();
@@ -109,7 +97,6 @@ describe('Access Control', () => {
     ACWithGrants.allow('Test').toExtend('Dev');
 
     const result = ACWithGrants.getRoles();
-    expect(mockConsoleLog).toHaveBeenCalled();
     expect(result).toHaveProperty('Test');
     expect(result.Test).toEqual({
       GetUsers: {

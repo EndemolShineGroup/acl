@@ -1,12 +1,13 @@
 import { cloneDeep, omit, isEmpty, map } from 'lodash';
 
-import { Roles, Permissions } from './types';
+import AccessControlError from './Errors/AccessControlError';
 import Step from './Steps/Step';
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
 import DoesAnyStep from './Steps/DoesAnyStep';
 import DoesStep from './Steps/DoesStep';
 import GrantStep from './Steps/GrantStep';
+import { Roles, Permissions } from './types';
 
 export default class AccessControl {
 
@@ -25,8 +26,7 @@ export default class AccessControl {
 
   getRoles(internal: Step | null = null): Roles {
     if (!this.hasRoles(this) && !internal) {
-      console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
-      return {};
+      throw new AccessControlError(`AccessControl setup incorrectly. Please set grants before using it`);
     }
 
     return cloneDeep(this.modifiedRoles);
