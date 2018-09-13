@@ -7,3 +7,6 @@
 # version 0.0.7
   `- Extended 'allow.toExtend' functionality to create new role when extending from existent role;`
   `- Updated tests for the new feature;`
+
+# version 0.0.8
+  `- Fixed types missing in package;`
