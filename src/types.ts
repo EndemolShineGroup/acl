@@ -1,16 +1,16 @@
-export interface ACGrants {
+export interface Grants {
   // [env]: boolean
   [key: string]: boolean;
 }
 
-export interface ACPermissions {
+export interface Permissions {
   // [job] : envs
-  [key: string]: ACGrants;
+  [key: string]: Grants;
 }
 
-export interface ACRoles {
+export interface Roles {
   //[role] : jobs
-  [key: string] : ACPermissions;
+  [key: string] : Permissions;
 }
 
 export interface GrantQuery {

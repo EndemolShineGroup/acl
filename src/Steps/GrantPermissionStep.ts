@@ -1,11 +1,12 @@
-import { ACStep } from './';
-import { ACRoles } from '../types';
-
 import { each, includes } from 'lodash';
 
-export default class GrantPermissionStep extends ACStep {
+import { Roles } from '../types';
+import Step from './Step';
+
+
+export default class GrantPermissionStep extends Step {
   for(...stages: string[]): void {
-    const roles: ACRoles = this.parent.getRoles(this);
+    const roles: Roles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
       roles[this.query.role!] = {};

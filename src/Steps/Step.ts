@@ -2,7 +2,7 @@ import AccessControl from '../AccessControl';
 
 import { GrantQuery } from '../types';
 
-export default class ACStep {
+export default class Step {
 
   query: Partial<GrantQuery>;
 

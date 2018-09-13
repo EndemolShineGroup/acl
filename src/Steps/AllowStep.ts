@@ -1,16 +1,16 @@
-import { ACStep } from './';
-import { ACRoles, ACPermissions, ACGrants } from '../types';
-
 import { isEqual, each, includes } from 'lodash';
 
-export default class AllowStep extends ACStep {
+import Step from './Step';
+import { Roles, Permissions, Grants } from '../types';
+
+export default class AllowStep extends Step {
   toExtend(anotherRole: string):void {
     if (!this.parent.hasRoles(this)) {
       console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return;
     }
 
-    const roles: ACRoles = this.parent.getRoles(this);
+    const roles: Roles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
       console.log(`AccessControl Warning: ${this.query.role} does not exist and will be created`);
@@ -23,10 +23,10 @@ export default class AllowStep extends ACStep {
       return;
     }
 
-    const primaryRolePermissions:   ACPermissions = roles[this.query.role!];
-    const secondaryRolePermissions: ACPermissions = roles[anotherRole];
+    const primaryRolePermissions:   Permissions = roles[this.query.role!];
+    const secondaryRolePermissions: Permissions = roles[anotherRole];
 
-    each(secondaryRolePermissions, (grants: ACGrants, permission: string) => {
+    each(secondaryRolePermissions, (grants: Grants, permission: string) => {
       if (isEqual(primaryRolePermissions[permission], secondaryRolePermissions[permission])) {
         return;
       }

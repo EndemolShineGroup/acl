@@ -1,38 +1,29 @@
 import { cloneDeep, omit, isEmpty, map } from 'lodash';
 
-// ACSteps
-import {
-  DoesAnyStep,
-  PermissionCheckStep,
-  HaveStep,
-  DoesStep,
-  AllowStep,
-  GrantPermissionStep,
-  GrantStep,
-  DenyPermissionStep,
-  DenyStep,
-  ACStep,
-} from './ACSteps';
-
-// Types
-import { ACRoles, GrantQuery, ACPermissions } from './types';
+import { Roles, Permissions } from './types';
+import Step from './Steps/Step';
+import AllowStep from './Steps/AllowStep';
+import DenyStep from './Steps/DenyStep';
+import DoesAnyStep from './Steps/DoesAnyStep';
+import DoesStep from './Steps/DoesStep';
+import GrantStep from './Steps/GrantStep';
 
 export default class AccessControl {
 
   /* Obs: Maybe we can remove it, it's currently here just to keep a reference to original roles passed by the use
     I've left there because I thought in the future we could have a reset functionality */
-  private roles: ACRoles = {};
+  private roles: Roles = {};
 
-  private modifiedRoles: ACRoles = {};
+  private modifiedRoles: Roles = {};
 
-  constructor(roles?: ACRoles) {
+  constructor(roles?: Roles) {
     if (roles) {
       this.roles         = roles;
       this.modifiedRoles = roles;
     }
   }
 
-  getRoles(internal: ACStep | null = null): ACRoles {
+  getRoles(internal: Step | null = null): Roles {
     if (!this.hasRoles(this) && !internal) {
       console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
       return {};
@@ -45,7 +36,7 @@ export default class AccessControl {
     return Object.keys(this.modifiedRoles);
   }
 
-  getPermissions(role: string): ACPermissions | null {
+  getPermissions(role: string): Permissions | null {
     if (isEmpty(this.modifiedRoles[role])) {
       console.error(`AccessControl Error: ${role} role does not exist. Can't get permissions`);
       return null
@@ -54,7 +45,7 @@ export default class AccessControl {
     return this.modifiedRoles[role];
   }
 
-  setRoles(grants: ACRoles):void {
+  setRoles(grants: Roles):void {
     this.roles         = grants;
     this.modifiedRoles = grants;
   }
@@ -90,11 +81,11 @@ export default class AccessControl {
   }
 
   // Internal methods
-  modifyRoles(roles: ACRoles, internal: ACStep):void {
+  modifyRoles(roles: Roles, internal: Step):void {
     this.modifiedRoles = roles;
   }
 
-  hasRoles(internal: ACStep | AccessControl): boolean {
+  hasRoles(internal: Step | AccessControl): boolean {
     return !isEmpty(this.modifiedRoles);
   }
 }
