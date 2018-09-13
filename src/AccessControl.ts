@@ -1,18 +1,19 @@
-import { cloneDeep, omit, isEmpty, map } from 'lodash';
+import { cloneDeep, isEmpty, omit } from 'lodash';
 
 import AccessControlError from './Errors/AccessControlError';
-import Step from './Steps/Step';
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
 import DoesAnyStep from './Steps/DoesAnyStep';
 import DoesStep from './Steps/DoesStep';
 import GrantStep from './Steps/GrantStep';
-import { Roles, Permissions } from './types';
+import Step from './Steps/Step';
+import { Permissions, Roles } from './types';
 
 export default class AccessControl {
 
   /* Obs: Maybe we can remove it, it's currently here just to keep a reference to original roles passed by the use
     I've left there because I thought in the future we could have a reset functionality */
+  // tslint:disable-next-line:no-unused-variable
   private roles: Roles = {};
 
   private modifiedRoles: Roles = {};
@@ -72,8 +73,7 @@ export default class AccessControl {
 
   remove(role: string):void {
     if (!this.hasRoles(this)) {
-      console.error(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
-      return;
+      throw new AccessControlError(`AccessControl setup incorrectly. Please set grants before using it`);
     }
 
     this.modifiedRoles = omit(this.modifiedRoles, [role]);

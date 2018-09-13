@@ -1,4 +1,4 @@
-import { Roles, GrantQuery } from '../types';
+import { GrantQuery, Roles } from '../types';
 import Step from './Step';
 
 export default class PermissionCheckStep extends Step {

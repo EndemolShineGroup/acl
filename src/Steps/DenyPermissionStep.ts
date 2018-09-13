@@ -1,8 +1,8 @@
-import { each, includes } from 'lodash';
+import { each } from 'lodash';
 
-import Step from './Step';
-import { Roles } from '../types';
 import AccessControlError from '../Errors/AccessControlError';
+import { Roles } from '../types';
+import Step from './Step';
 
 export default class DenyPermissionStep extends Step {
   for(...stages: string[]): void {

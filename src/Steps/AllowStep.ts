@@ -1,8 +1,8 @@
-import { isEqual, each, includes } from 'lodash';
+import { each, isEqual } from 'lodash';
 
-import Step from './Step';
-import { Roles, Permissions, Grants } from '../types';
 import AccessControlError from '../Errors/AccessControlError';
+import { Grants, Permissions, Roles } from '../types';
+import Step from './Step';
 
 export default class AllowStep extends Step {
   toExtend(anotherRole: string):void {
@@ -35,8 +35,8 @@ export default class AllowStep extends Step {
       if (!primaryRolePermissions[permission]) {
         primaryRolePermissions[permission] = {
           dev: false,
-          staging: false,
           prod: false,
+          staging: false,
         };
       }
 
