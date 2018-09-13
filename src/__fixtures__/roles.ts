@@ -1,6 +1,6 @@
-import { ACRoles } from '../types';
+import { Roles } from '../types';
 
-const GrantsObj: ACRoles = {
+const GrantsObj: Roles = {
   User: {
     GetUsers: {
       dev: false,
