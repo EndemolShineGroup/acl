@@ -25,9 +25,7 @@
     "build": "rimraf dist/ && tsc",
     "build:watch": "tsc --watch",
     "pretest": "rimraf coverage/",
-    "test": "yarn test:unit && yarn test:integration",
-    "test:unit": "jest --no-cache",
-    "test:integration": "yarn build && node tests/dist_integration.js",
+    "test": "jest --no-cache",
     "release": "yarn test && node scripts/bump_version.js && npm publish"
   },
   "dependencies": {

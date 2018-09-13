@@ -1,4 +1,4 @@
-import AccessControl from '../src';
+import AccessControl from './AccessControl';
 
 import rolesFixture from './__fixtures__/roles';
 
