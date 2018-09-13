@@ -1,6 +1,7 @@
-import { ACStep, PermissionCheckStep } from './';
+import PermissionCheckStep from './PermissionCheckStep';
+import Step from './Step';
 
-export default class HaveAnyStep extends ACStep{
+export default class HaveAnyStep extends Step {
   for(environment: string):boolean {
     const roles: string[] = this.query.roles!;
 
