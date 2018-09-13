@@ -10,7 +10,7 @@ export interface Permissions {
 
 export interface Roles {
   //[role] : jobs
-  [key: string] : Permissions;
+  [key: string]: Permissions;
 }
 
 export interface GrantQuery {
@@ -22,5 +22,5 @@ export interface GrantQuery {
 
 // Basic types
 export interface StringObj {
-  [key: string] : string;
+  [key: string]: string;
 }
