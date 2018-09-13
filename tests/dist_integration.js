@@ -1,6 +1,6 @@
 try {
  //import AccessControl from '../dist/src';
-const AccessControl = require('../dist/src').default;
+const AccessControl = require('../dist').default;
  // const ac = new AccessControl({
  //    'Test': {
  //        'GetUsers': {

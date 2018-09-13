@@ -1,0 +1,42 @@
+import { ACRoles } from '../../src/types';
+
+const GrantsObj: ACRoles = {
+  User: {
+    GetUsers: {
+      dev: false,
+      staging: false,
+      prod: true,
+    },
+    SaveUsers: {
+      dev: false,
+      staging: false,
+      prod: false,
+    }
+  },
+  Admin: {
+    GetUsers: {
+      dev: true,
+      staging: true,
+      prod: true,
+    },
+    SaveUsers: {
+      dev: true,
+      staging: true,
+      prod: true,
+    }
+  },
+  Dev: {
+    GetUsers: {
+      dev: true,
+      staging: true,
+      prod: true,
+    },
+    SaveUsers: {
+      dev: true,
+      staging: true,
+      prod: false,
+    }
+  }
+};
+
+export default GrantsObj;
