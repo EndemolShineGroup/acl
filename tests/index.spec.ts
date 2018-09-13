@@ -1,144 +1,106 @@
-import 'mocha';
-import * as chai from 'chai';
-import * as sinon from 'sinon';
-import * as sinonChai from 'sinon-chai';
-
 import AccessControl from '../src';
-import { ACRoles } from '../src/types';
 
-const expect = chai.expect;
+import rolesFixture from './__fixtures__/roles';
 
-chai.use(sinonChai);
-
-const GrantsObj: ACRoles = {
-    User: {
-        GetUsers: {
-            dev: false,
-            staging: false,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: false,
-            staging: false,
-            prod: false,
-        }
-    },
-    Admin: {
-        GetUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        }
-    },
-    Dev: {
-        GetUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: true,
-            staging: true,
-            prod: false,
-        }
-    }
-}
-
-let ACWithGrants: AccessControl;
-
-let ACWithoutGrants: AccessControl
+type ConsoleLog = (message?: any, ...optionalParams: any[]) => void;
+type ConsoleError = ConsoleLog;
 
 describe('Access Control', () => {
 
-  beforeEach(() => {
-    ACWithGrants = new AccessControl(GrantsObj);
-    ACWithoutGrants = new AccessControl();
-  })
+  let ACWithGrants: AccessControl;
+  let ACWithoutGrants: AccessControl;
 
-  // Set console.error spy once
-  sinon.spy(console, 'error');
+  let mockConsoleLog: jest.Mock<ConsoleLog>;
+  let mockConsoleError: jest.Mock<ConsoleError>;
+
+  beforeEach(() => {
+    ACWithGrants = new AccessControl(rolesFixture);
+    ACWithoutGrants = new AccessControl();
+
+    mockConsoleError = jest.spyOn(global.console, 'error').mockImplementation(() => {
+      return;
+    });
+    mockConsoleLog = jest.spyOn(global.console, 'log').mockImplementation(() => {
+      return;
+    });
+  });
 
   it('`getRoles()` should return the data passed in the constructor', () => {
-    expect(ACWithGrants.getRoles()).to.deep.equal(GrantsObj);
+    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
   it('`getRoles()` should return the data passed in via `setRoles()`', () => {
-    ACWithoutGrants.setRoles(GrantsObj);
+    ACWithoutGrants.setRoles(rolesFixture);
 
-    expect(ACWithGrants.getRoles()).to.deep.equal(GrantsObj);
+    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
   it('`getRoles()` should console.error if no grantsObj has been passed to AccessControl', () => {
     ACWithoutGrants.getRoles();
 
-    expect(console.error).to.be.called;
+    expect(mockConsoleError).toHaveBeenCalled();
   });
 
   it('get permission should return false', () => {
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).to.be.false;
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).toBeFalsy();
   });
 
   it('get permission should return true', () => {
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('prod')).to.be.true;
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('prod')).toBeTruthy();
   });
 
   it('grant permission should return true', () => {
     ACWithGrants.grant('User').permission('GetUsers').for('dev');
 
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).to.be.true;
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).toBeTruthy();
   });
 
   it('grant permission to a new role should create role with all true stages', () => {
     ACWithGrants.grant('Test').permission('GetUsers').for('dev', 'staging', 'prod');
 
-    expect(ACWithGrants.getRoles()).to.deep.include({
-      'Test': {
-        GetUsers: {
-          dev: true,
-          staging: true,
-          prod: true,
-        },
-      }
+    const result = ACWithGrants.getRoles();
+    expect(result).toHaveProperty('Test');
+    expect(result.Test).toEqual({
+      GetUsers: {
+        dev: true,
+        staging: true,
+        prod: true,
+      },
     });
   });
 
   it('grant permission to a new role should create role with all false stages', () => {
     ACWithGrants.grant('Test').permission('GetUsers').for();
 
-    expect(ACWithGrants.getRoles()).to.deep.include({
-          'Test': {
-              GetUsers: {
-                  dev: false,
-                  staging: false,
-                  prod: false,
-              },
-          }
-      });
+    const result = ACWithGrants.getRoles();
+    expect(result).toHaveProperty('Test');
+    expect(result.Test).toEqual({
+      GetUsers: {
+        dev: false,
+        staging: false,
+        prod: false,
+      },
+    });
   });
 
   it('should `console.error` when trying to extend nonexistent role and role to keep the same', () => {
     ACWithGrants.allow('Dev').toExtend('Text');
 
-    expect(console.error).to.be.called;
+    expect(mockConsoleError).toHaveBeenCalled();
 
     // Role should not mutate if the error occurs
-    expect(ACWithGrants.getRoles()).to.deep.include({
-      Dev: {
-        GetUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: true,
-            staging: true,
-            prod: false,
-        }
+    const result = ACWithGrants.getRoles();
+    expect(result).toHaveProperty('Dev');
+    expect(result.Dev).toEqual({
+      GetUsers: {
+        dev: true,
+        staging: true,
+        prod: true,
+      },
+      SaveUsers: {
+        dev: true,
+        staging: true,
+        prod: false,
       }
     });
   });
@@ -146,18 +108,19 @@ describe('Access Control', () => {
   it('extending NEW role 1 should have all permissions existing role 2 has', () => {
     ACWithGrants.allow('Test').toExtend('Dev');
 
-    expect(ACWithGrants.getRoles()).to.deep.include({
-      Test: {
-        GetUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: true,
-            staging: true,
-            prod: false,
-        }
+    const result = ACWithGrants.getRoles();
+    expect(mockConsoleLog).toHaveBeenCalled();
+    expect(result).toHaveProperty('Test');
+    expect(result.Test).toEqual({
+      GetUsers: {
+        dev: true,
+        staging: true,
+        prod: true,
+      },
+      SaveUsers: {
+        dev: true,
+        staging: true,
+        prod: false,
       }
     });
   });
@@ -165,34 +128,29 @@ describe('Access Control', () => {
   it('extending role 1 should have all permissions role 2 has', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).to.be.true
-      .and
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('staging')).to.be.true
-      .and
-    expect(ACWithGrants.does('User').havePermission('GetUsers').for('prod')).to.be.true
-      .and
-    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('dev')).to.be.true
-      .and
-    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('staging')).to.be.true
-      .and
-    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).to.be.false
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('dev')).toBeTruthy();
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('staging')).toBeTruthy();
+    expect(ACWithGrants.does('User').havePermission('GetUsers').for('prod')).toBeTruthy();
+    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('dev')).toBeTruthy();
+    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('staging')).toBeTruthy();
+    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).toBeFalsy();
   });
 
   it('extending role 1 should have all permissions role 2 has', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
-    expect(ACWithGrants.getRoles()).to.deep.include({
-      User: {
-        GetUsers: {
-            dev: true,
-            staging: true,
-            prod: true,
-        },
-        SaveUsers: {
-            dev: true,
-            staging: true,
-            prod: false,
-        }
+    const result = ACWithGrants.getRoles();
+    expect(result).toHaveProperty('User');
+    expect(result.User).toEqual({
+      GetUsers: {
+        dev: true,
+        staging: true,
+        prod: true,
+      },
+      SaveUsers: {
+        dev: true,
+        staging: true,
+        prod: false,
       }
     });
   });
@@ -201,33 +159,33 @@ describe('Access Control', () => {
     ACWithGrants.allow('Admin').toExtend('Dev');
 
     // In `dev` prod is false but `admin` is true, extending `dev` should not make the value false
-    expect(ACWithGrants.does('Admin').havePermission('SaveUsers').for('prod')).to.be.true
+    expect(ACWithGrants.does('Admin').havePermission('SaveUsers').for('prod')).toBeTruthy();
   });
 
   it('permission denied should return false', () => {
     ACWithGrants.deny('Admin').permission('SaveUsers').for('prod');
 
-    expect(ACWithGrants.does('Admin').havePermission('SaveUsers').for('prod')).to.be.false
+    expect(ACWithGrants.does('Admin').havePermission('SaveUsers').for('prod')).toBeFalsy()
   });
 
   it('remove role should console.error and be inaccessible', () => {
     ACWithGrants.remove('User');
 
-    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).to.be.false
+    expect(ACWithGrants.does('User').havePermission('SaveUsers').for('prod')).toBeFalsy()
 
-    expect(console.error).to.be.called;
+    expect(mockConsoleError).toHaveBeenCalled();
   });
 
   it('should return true when calling `DoesAny` with User and Admin for SaveUser.prod', () => {
-    expect(ACWithGrants.doesAny(['User', 'Admin']).havePermission('SaveUsers').for('prod')).to.be.true
+    expect(ACWithGrants.doesAny(['User', 'Admin']).havePermission('SaveUsers').for('prod')).toBeTruthy();
   });
 
   it('should return false when calling `DoesAny` with User and Dev for SaveUser.prod', () => {
-    expect(ACWithGrants.doesAny(['User', 'Dev']).havePermission('SaveUsers').for('prod')).to.be.false
+    expect(ACWithGrants.doesAny(['User', 'Dev']).havePermission('SaveUsers').for('prod')).toBeFalsy();
   });
 
   it('should return a list of string with all roles', () => {
-    expect(ACWithGrants.getRolesList()).to.deep.equal([
+    expect(ACWithGrants.getRolesList()).toEqual([
       'User',
       'Admin',
       'Dev'
@@ -238,7 +196,7 @@ describe('Access Control', () => {
 
     ACWithGrants.grant('Test').permission('GetUsers').for('dev', 'staging', 'prod');
 
-    expect(ACWithGrants.getRolesList()).to.deep.equal([
+    expect(ACWithGrants.getRolesList()).toEqual([
       'User',
       'Admin',
       'Dev',
@@ -247,37 +205,37 @@ describe('Access Control', () => {
   });
 
   it('should return an object with role permissions', () => {
-    expect(ACWithGrants.getPermissions('User')).to.deep.equal( {
+    expect(ACWithGrants.getPermissions('User')).toEqual({
       GetUsers: {
-          dev: false,
-          staging: false,
-          prod: true,
+        dev: false,
+        staging: false,
+        prod: true,
       },
       SaveUsers: {
-          dev: false,
-          staging: false,
-          prod: false,
+        dev: false,
+        staging: false,
+        prod: false,
       }
     });
   });
 
   it('should return console.error and return null for non existent role', () => {
-    expect(ACWithGrants.getPermissions('Test')).to.deep.equal(null);
+    expect(ACWithGrants.getPermissions('Test')).toEqual(null);
 
-    expect(console.error).to.be.called;
+    expect(mockConsoleError).toHaveBeenCalled();
   });
 
-   it('should create a new role with new permissions even if we don`t set initial object', () => {
+  it('should create a new role with new permissions even if we don`t set initial object', () => {
     ACWithoutGrants.grant('NEW_ROLE').permission('NEW_PERMISSION').for('dev', 'staging')
 
-    expect(ACWithoutGrants.getRoles()).to.deep.include({
-      NEW_ROLE: {
-        NEW_PERMISSION: {
-            dev: true,
-            staging: true,
-            prod: false,
-        },
-      }
+    const result = ACWithoutGrants.getRoles();
+    expect(result).toHaveProperty('NEW_ROLE');
+    expect(result.NEW_ROLE).toEqual({
+      NEW_PERMISSION: {
+        dev: true,
+        staging: true,
+        prod: false,
+      },
     });
   });
 });
