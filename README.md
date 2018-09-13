@@ -1,30 +1,31 @@
-# package-accesscontrol
-AccessControl package in typescript with tests
+# acl
+
+Fully-tested AccessControl implementation in TypeScript
 
 # install
-`yarn add esgt-access-control`
+`yarn add @endemolshinegroup/acl`
 or
-`npm i esgt-access-control --save`
+`npm i @endemolshinegroup/acl --save`
 
 # Types
   ```
-  ACGrants {
+  Grants {
     // [env]: boolean
     [key: string]: boolean;
   }
   ```
 
   ```
-  ACPermissions {
+  Permissions {
     // [job] : envs
-    [key: string]: ACGrants;
+    [key: string]: Grants;
   }
   ```
 
   ```
-  ACRoles {
+  Roles {
     //[role] : jobs
-    [key: string] : ACPermissions;
+    [key: string] : Permissions;
   }
   ```
 
@@ -82,26 +83,3 @@ ac.getRolesList();
 ```
 ac.getPermissions(role: string);
 ```
-
-#CHANGE LOG
-  `version 0.0.6`
-
-    ```
-      - Fixed bug with adding new roles via 'grant';
-      - Added todo.md;
-      - Fixed log from being displayed on internal requests;
-      - Updated internal request to 'getRoles' to be flagged as interal;
-    ```
-
-  `version 0.0.7`
-
-    ```
-      - Extended 'allow.toExtend' functionality to create new role when extending from existent role;
-      - Updated tests for the new feature;
-    ```
-
-    `version 0.0.8`
-
-    ```
-      - Fixed types missing in package;
-    ```
