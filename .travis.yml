@@ -1,0 +1,35 @@
+language: node_js
+
+cache: yarn
+
+node_js:
+  - 8
+  - 10
+
+before_install:
+  - npm i -g yarn
+
+script:
+  - yarn build
+  - yarn test
+
+notifications:
+  slack:
+    secure: BovDem50xCSKtL3wphR03IpYOo/V9fQwUj8LHbXcSv2cUxT5gDTXgAe9fLymDZqK71geV6ucQipKRBHazmSb+IENUgSWP9nra3gkdbS058jMQ2DPGuq6y3RlIte040s2YeqriFknGZxOLP6aeZx3PrrN6+xIqEfOXu8laMobB5pL4XxD531yRRdl6i7A6Dm2bvyqdj0mJ7wOt8mA037ptnujXNKCbjPKlFmxiRVYGIzaSF5T/8twkf8zDEEr3fEQ9VEqY3JPco4fp/zaDeFjpxEasudoprXkYeuiHg/xkPqkfXJ6mBuuEjBA1KVtk5i7T3pVw4EGyrxvJvx15nIn/ABqh1/hV7Tg7zCMuQ+aKIlX7cgrNFobIdF/i1/nF00JtiPO1bn+YW6m95FJkVUXRb/lrozn4sYyUhuJmlQ4IRP8CFc4rivzHzASdUw7JOJC9Z+3HsoCwse4XpZOsIA4vRnAxm+kwzLgMuv94ccZiP70pG+7DkbW5IQ6qFlMsUjpqBb7qkkT0ttQolHbYZteKkXCos5CQkqdFZPUXoh5KOwx1apxaOvlFDz/XU5gPEhp9AePoXtDkoJ5nwbfWTgjcyeKA3sJrjhUhMa12VNKYIFq6H7Oh8btqaph3HTwg76MjtNNYpFnrJ7Zda1Rb2ISqp5Us2aFF9O3Kn8bv1CxYtA=
+
+env:
+  global:
+    - secure: mcE15BjcaWswZ8A8c5k17IlCDpLfEdm521pclwwXZNN0rmQLzL7wXHWApLqgqhlS3kxVJx9kCksbtlJpTm/XDt/GusQ0uVspN+J/L8/rsrwtVL80Ff0vN3oevj0PwpokGCCJHAurhTTKnagdJ+MFQrN0ifWW4jHdItQiGumbWCWxsX4d0x4MuN/yAapri7F0dIZwoMS/uBzTjtfd3Luxwq1lMY9DNTV0LeHYZ1UA6twi/Z9dHa2cgdP2zqIz0MsQLG+qIk+2szAsf6VvbuMDn5ChbJjiXNLdvnko1YT5xh7R66gG2io1OJI2NmBls4Qo/kzIgtBvJmOMljPtHDa0P/54hIdFbJevWMI6t7U5bSiQXDwYLcFwc4v7DEKUs3HkggcSZ8Twb+DlW4X4EAXXcnvK4Qm5aR/h+Ee/jAGSEIeOJH7mdoQrMHtuQJUiFLwuWYoDf5GJNjpBCHVGoIJE7XuabAyaXPxNzqoDuh3LrqdhzP3dZO1RjPO8p0LV+aQrm8wLQPVSYj0HR4YBwkksL1zwAlidWQj2Yh8wbxCNN3+XCiM5dQ8Co9j7vJr3nMgvOqXW/vQjlWmrmdt4blLWKfBPo4H72jRFqk3R/NYpyQOPtVX0nsGk08ZELUzhMS+LmHqM7aRJRxgAAl3DE4OwILX3zHRdZ0tb+kqqd/p3rVA=
+    - secure: NAfGbgAQOplnc3W//sc7SAaI7m6iDgyfoSW29QbFV05tBneqCAh45INb3Lvj9cLqi9BsUa0Mozy2Buj5O3iBNYL4iij3dwXiktJe+fJp8KpkD7K9n5MfZhKp+d+5ocjwgszoykNBxKlkLB8i/RH0YcK7KppYANsfvfb8B8kSH6ohZvfyJWNwTtdMot2vQakEItQ5HFIafPeDjBK8W1XpJpJ1dAPoh1SoUt+entJyQlqw88O9AiGttZ905+g1U83l4jlb04C9CI/el5eCwUSR0ozJ3UQikW2AUZwov/8+T3KRxV2sd9bD5UT+FleiPuI/N4xr8eCcEI0+SOghJX/oSR8sXiAsnlzKhx3Pu2YmRKPiVeVW5joyojWNlh1xT1uey+tzgKyF44GT8TE5APo3nSPTcPO2o1cAoi0tcAU4Mx7JVDrl7dpeGIlIcTmmRJfaiZCF9srnrhbCCcr5isSNpZzrsAqcbxJkfC3Z70Go0KQrR6kZrtUja1A79saAIiOxBSEW6MoSJbPeSladP+qL5A9n3tB8/DCt/Z5R0DPl8mXLlSZ9PK2RVQepDuAyC7Qf+M0KLUxw1wSzITwLzuyRdt69qPwr7qvzJzLPJB+bRrC8q2HISApnMWVzGU5xTJAK9kHKnc8p2FRake6FkLFw/MR9qycB05YJEKeeDZWlBbA=
+    - export GIT_AUTHOR_NAME="EndemolShineGroupUser"
+    - export GIT_AUTHOR_EMAIL="tech@endemolshine.com"
+    - export GIT_COMMITTER_NAME="EndemolShineGroupUser"
+    - export GIT_COMMITTER_EMAIL="tech@endemolshine.com"
+
+jobs:
+  include:
+    - stage: coverage
+      if: type != pull_request
+      after_success:
+        - yarn global add codecov
+        - codecov
