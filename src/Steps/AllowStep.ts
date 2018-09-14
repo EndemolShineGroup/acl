@@ -1,4 +1,5 @@
-import { each, isEqual } from 'lodash';
+import each from 'lodash.foreach';
+import isEqual from 'lodash.isequal';
 
 import AccessControlError from '../Errors/AccessControlError';
 import { Grants, Permissions, Roles } from '../types';
