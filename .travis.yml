@@ -40,6 +40,6 @@ jobs:
         - yarn global add codecov
         - codecov
     - stage: release
-      if: branch = master
+      if: branch = master AND type != pull_request
       after_success:
         - semantic-release
