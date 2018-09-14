@@ -102,8 +102,8 @@ ac.getPermissions(role: string);
 [link-license]: LICENSE
 [icon-npm]: https://img.shields.io/npm/v/@endemolshinegroup/acl.svg?longCache=true&style=flat-square
 [link-npm]: https://www.npmjs.com/package/@endemolshinegroup/acl
-[icon-ci]: https://img.shields.io/travis/EndemolShineGroup/acl.svg?longCache=true&style=flat-square
-[link-ci]: https://travis-ci.org/EndemolShineGroup/acl
+[icon-ci]: https://img.shields.io/travis/com/EndemolShineGroup/acl.svg?longCache=true&style=flat-square
+[link-ci]: https://travis-ci.com/EndemolShineGroup/acl
 [icon-greenkeeper]: https://img.shields.io/badge/greenkeeper-enabled-brightgreen.svg?longCache=true&style=flat-square
 [link-greenkeeper]: https://greenkeeper.io/
 
