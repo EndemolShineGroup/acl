@@ -1,9 +1,13 @@
+import debug from 'debug';
+
 import each from 'lodash.foreach';
 import isEqual from 'lodash.isequal';
 
 import AccessControlError from '../Errors/AccessControlError';
 import { Grants, Permissions, Roles } from '../types';
 import Step from './Step';
+
+const log = debug('acl:allow');
 
 export default class AllowStep extends Step {
   toExtend(roleNameToExtend: string): void {
@@ -16,9 +20,11 @@ export default class AllowStep extends Step {
     const roles: Roles = this.parent.getRoles(this);
 
     if (!roles[this.query.role!]) {
-      // throw new AccessControlError(`AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`);
-      // console.log(`AccessControl Warning: ${this.query.role} does not exist and will be created`);
-      // return;
+      log(
+        `AccessControl Warning: ${
+          this.query.role
+        } does not exist and will be created`,
+      );
       roles[this.query.role!] = {};
     }
 

@@ -33,6 +33,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
+    "debug": "^4.0.1",
     "lodash.clonedeep": "^4",
     "lodash.foreach": "^4",
     "lodash.isempty": "^4",
@@ -46,6 +47,7 @@
     "@commitlint/prompt": "^7",
     "@semantic-release/changelog": "^3",
     "@semantic-release/git": "^7",
+    "@types/debug": "^0.0.30",
     "@types/jest": "^23",
     "@types/lodash.clonedeep": "^4",
     "@types/lodash.foreach": "^4",
