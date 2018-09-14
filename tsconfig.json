@@ -10,6 +10,7 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
+    "sourceMap": true,
     "strict": true
   },
   "include": [
