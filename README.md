@@ -22,7 +22,6 @@ Fully-tested AccessControl implementation written in TypeScript.
 or
 `npm i @endemolshinegroup/acl --save`
 
-
 ## Usage
 
 ```
