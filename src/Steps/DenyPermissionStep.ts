@@ -1,4 +1,4 @@
-import { each } from 'lodash';
+import each from 'lodash.foreach';
 
 import AccessControlError from '../Errors/AccessControlError';
 import { Roles } from '../types';

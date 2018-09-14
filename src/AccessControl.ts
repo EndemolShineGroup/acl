@@ -1,4 +1,6 @@
-import { cloneDeep, isEmpty, omit } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
+import isEmpty from 'lodash.isempty';
+import omit from 'lodash.omit';
 
 import AccessControlError from './Errors/AccessControlError';
 import AllowStep from './Steps/AllowStep';

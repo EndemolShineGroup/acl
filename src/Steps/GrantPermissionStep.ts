@@ -1,4 +1,4 @@
-import { each } from 'lodash';
+import each from 'lodash.foreach';
 
 import { Roles } from '../types';
 import Step from './Step';
