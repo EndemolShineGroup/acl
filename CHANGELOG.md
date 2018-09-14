@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/EndemolShineGroup/acl/compare/v1.0.0...v1.1.0) (2018-09-14)
+
+
+### Features
+
+* **logging:** add debug package to project for logging errors ([a82b57f](https://github.com/EndemolShineGroup/acl/commit/a82b57f))
+
 # 1.0.0 (2018-09-14)
 
 
