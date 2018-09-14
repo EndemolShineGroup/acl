@@ -49,6 +49,12 @@ $ yarn
 $ yarn test
 ```
 
+## Releasing a new version
+
+To release a new version, simply merge `develop` into `master` and let the CI
+take care of everything. This includes Git tags, changelog generation and NPM
+releases.
+
 ## Reporting a security vulnerability
 
 We want to ensure that `@endemolshinegroup/acl` is secure for everyone. If
