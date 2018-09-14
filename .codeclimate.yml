@@ -7,6 +7,7 @@ plugins:
 exclude_patterns:
   - ".github/"                                      # Exclude GitHub issue templates
   - "scripts/"                                      # Exclude project build scripts
+  - "CHANGELOG.md"                                  # Exclude automatically generated CHANGELOG.md
   - "**/dist/"
   - "**/node_modules/"
   - "**/tests/"
