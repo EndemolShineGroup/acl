@@ -42,4 +42,10 @@ jobs:
     - stage: release
       if: branch = master AND type != pull_request
       after_success:
-        - semantic-release
+        - yarn semantic-release
+        - git clone https://github.com/$TRAVIS_REPO_SLUG.git $TRAVIS_REPO_SLUG
+        - cd $TRAVIS_REPO_SLUG
+        - git fetch
+        - git checkout develop
+        - git merge master
+        - git push
