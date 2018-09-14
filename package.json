@@ -41,7 +41,7 @@
     "@commitlint/prompt": "^7",
     "@types/jest": "^23",
     "@types/lodash": "^4",
-    "@types/node": "^8",
+    "@types/node": "^10.9.4",
     "commitizen": "^2",
     "husky": "^1.0.0-rc.14",
     "jest": "^23",
