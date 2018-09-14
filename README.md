@@ -16,36 +16,17 @@
 
 Fully-tested AccessControl implementation written in TypeScript.
 
-# install
+## Installation
+
 `yarn add @endemolshinegroup/acl`
 or
 `npm i @endemolshinegroup/acl --save`
 
-# Types
-  ```
-  Grants {
-    // [env]: boolean
-    [key: string]: boolean;
-  }
-  ```
 
-  ```
-  Permissions {
-    // [job] : envs
-    [key: string]: Grants;
-  }
-  ```
+## Usage
 
-  ```
-  Roles {
-    //[role] : jobs
-    [key: string] : Permissions;
-  }
-  ```
-
-# Data example
 ```
-const rolesObj = {
+const roles = {
   User: {
     GetUsers: {
       dev: true,
@@ -54,47 +35,34 @@ const rolesObj = {
     }
   }
 }
-```
 
-# API:
-`Setting roles`
-```
-const ac = new AccessControl(rolesObj); // constructor
+// Create an instance of AccessControl
+const ac = new AccessControl(rolesObj);
+// you can also do the following at any time
+ac.setRoles(rolesObj);
 
-or
+// Checking permissions
+ac.does(`${role}`).havePermission(`${permission}`).for(`${stage}`); // true
 
-ac.setRoles(rolesObj); // any time
-```
-`Checking permissions (boolean)`
-```
-ac.does(`${role}`).havePermission(`${permission}`).for(`${stage}`);
-```
-`Granting permission (void)`
-```
+// Granting a permission
 ac.grant(`${role}`).permission(`${permission}`).for(`${stage[]}`);
-```
-`Denying permission (void)`
-```
+
+// Denying a permission
 ac.deny(`${role}`).permission(`${permission}`).for(`${stage[]}`);
-```
-`Extending permission (void)`
-```
+
+// Extending permission
 ac.allow(`${role}`).toExtend(`${role2}`);
-```
-`Removing role (void)`
-```
+
+// Removing role
 ac.remove(`${role}`);
-```
-`Retrieving roles obj (ACRoles)`
-```
+
+// Retrieving roles
 ac.getRoles();
-```
-`Retrieving roles list (string[])`
-```
+
+// Retrieving a list of role names
 ac.getRolesList();
-```
-`Retrieving permissions for role (ACPermissions)`
-```
+
+// Retrieving permissions for role
 ac.getPermissions(role: string);
 ```
 
