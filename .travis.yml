@@ -39,3 +39,7 @@ jobs:
       after_success:
         - yarn global add codecov
         - codecov
+    - stage: release
+      if: branch = master
+      after_success:
+        - semantic-release
