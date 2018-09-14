@@ -5,7 +5,7 @@ import { Grants, Permissions, Roles } from '../types';
 import Step from './Step';
 
 export default class AllowStep extends Step {
-  toExtend(anotherRole: string): void {
+  toExtend(roleNameToExtend: string): void {
     if (!this.parent.hasRoles(this)) {
       throw new AccessControlError(
         `AccessControl setup incorrectly. Please set grants before using it`,
@@ -21,14 +21,14 @@ export default class AllowStep extends Step {
       roles[this.query.role!] = {};
     }
 
-    if (!roles[anotherRole]) {
+    if (!roles[roleNameToExtend]) {
       throw new AccessControlError(
-        `Cannot extend ${anotherRole} role because it could not be found in roles`,
+        `Cannot extend ${roleNameToExtend} role because it could not be found in roles`,
       );
     }
 
     const primaryRolePermissions: Permissions = roles[this.query.role!];
-    const secondaryRolePermissions: Permissions = roles[anotherRole];
+    const secondaryRolePermissions: Permissions = roles[roleNameToExtend];
 
     each(secondaryRolePermissions, (grants: Grants, permission: string) => {
       if (
