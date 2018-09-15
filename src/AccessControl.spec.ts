@@ -2,9 +2,8 @@ import AccessControl from './AccessControl';
 
 import rolesFixture from './__fixtures__/roles';
 import AccessControlError from './Errors/AccessControlError';
-
-type ConsoleLog = (message?: any, ...optionalParams: any[]) => void;
-type ConsoleError = ConsoleLog;
+import PermissionNotFoundError from './Errors/PermissionNotFoundError';
+import RoleNotFoundError from './Errors/RoleNotFoundError';
 
 describe('Access Control', () => {
   let ACWithGrants: AccessControl;
@@ -25,7 +24,7 @@ describe('Access Control', () => {
     expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
-  it('`getRoles()` should throw an error if no grants were passed to AccessControl', () => {
+  it('`getRoles()` should throw an AccessControlError if no grants were passed to AccessControl', () => {
     expect(() => {
       ACWithoutGrants.getRoles();
     }).toThrow(AccessControlError);
@@ -91,10 +90,10 @@ describe('Access Control', () => {
     });
   });
 
-  it('should throw an AccessControlError when trying to extend a nonexistent role', () => {
+  it('should throw an RoleNotFoundError when trying to extend a nonexistent role', () => {
     expect(() => {
       ACWithGrants.allow('Dev').toExtend('Text');
-    }).toThrow(AccessControlError);
+    }).toThrow(RoleNotFoundError);
 
     // Role should not mutate if the error occurs
     const result = ACWithGrants.getRoles();
@@ -268,10 +267,10 @@ describe('Access Control', () => {
     });
   });
 
-  it('should return console.error and return null for non existent role', () => {
+  it('should throw PermissionNotFoundError', () => {
     expect(() => {
       ACWithGrants.getPermissions('Test');
-    }).toThrow(AccessControlError);
+    }).toThrow(PermissionNotFoundError);
   });
 
   it('should create a new role with new permissions even if we don`t set initial object', () => {

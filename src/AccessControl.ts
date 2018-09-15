@@ -3,6 +3,8 @@ import isEmpty from 'lodash.isempty';
 import omit from 'lodash.omit';
 
 import AccessControlError from './Errors/AccessControlError';
+import PermissionNotFoundError from './Errors/PermissionNotFoundError';
+import RoleNotFoundError from './Errors/RoleNotFoundError';
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
 import DoesAnyStep from './Steps/DoesAnyStep';
@@ -27,10 +29,8 @@ export default class AccessControl {
   }
 
   getRoles(internal: Step | null = null): Roles {
-    if (!this.hasRoles(this) && !internal) {
-      throw new AccessControlError(
-        `AccessControl setup incorrectly. Please set grants before using it`,
-      );
+    if (!this.hasRoles() && !internal) {
+      throw new AccessControlError();
     }
 
     return cloneDeep(this.modifiedRoles);
@@ -42,9 +42,7 @@ export default class AccessControl {
 
   getPermissions(role: string): Permissions | null {
     if (isEmpty(this.modifiedRoles[role])) {
-      throw new AccessControlError(
-        `${role} role does not exist. Can't get permissions`,
-      );
+      throw new PermissionNotFoundError(role);
     }
 
     return this.modifiedRoles[role];
@@ -78,9 +76,7 @@ export default class AccessControl {
 
   remove(role: string): void {
     if (!this.hasRoles(this)) {
-      throw new AccessControlError(
-        `AccessControl setup incorrectly. Please set grants before using it`,
-      );
+      throw new AccessControlError();
     }
 
     this.modifiedRoles = omit(this.modifiedRoles, [role]);
@@ -91,7 +87,7 @@ export default class AccessControl {
     this.modifiedRoles = roles;
   }
 
-  hasRoles(internal: Step | AccessControl): boolean {
+  hasRoles(internal?: Step | AccessControl): boolean {
     return !isEmpty(this.modifiedRoles);
   }
 }

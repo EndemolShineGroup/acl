@@ -1,14 +1,16 @@
 import AccessControl from '../AccessControl';
-
+import AccessControlError from '../Errors/AccessControlError';
 import { GrantQuery } from '../types';
 
 export default class Step {
-  query: Partial<GrantQuery>;
+  constructor(
+    protected query: Partial<GrantQuery>,
+    protected parent: AccessControl,
+  ) {}
 
-  parent: AccessControl;
-
-  constructor(query: Partial<GrantQuery>, parent: AccessControl) {
-    this.query = query;
-    this.parent = parent;
+  checkRolesExist() {
+    if (!this.parent.hasRoles()) {
+      throw new AccessControlError();
+    }
   }
 }

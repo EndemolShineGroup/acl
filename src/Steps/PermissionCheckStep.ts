@@ -7,11 +7,12 @@ const log = debug('acl:permission-check');
 
 export default class PermissionCheckStep extends Step {
   hasPermission(): boolean {
-    if (!this.parent.hasRoles(this)) {
-      log(
-        `AccessControl Error: AccessControl setup incorrectly. Please set grants before using it`,
-      );
-      return false;
+    try {
+      this.checkRolesExist();
+    } catch (error) {
+      if (error.message.includes('AccessControl setup incorrectly')) {
+        return false;
+      }
     }
 
     const roles: Roles = this.parent.getRoles(this);

@@ -1,11 +1,8 @@
-import { BaseError } from 'make-error';
+import Error from './Error';
 
-export default class AccessControlError extends BaseError {
-  toObject = () => {
-    return {
-      message: this.message,
-      name: this.name,
-      stack: this.stack,
-    };
-  };
+export default class AccessControlError extends Error {
+  constructor(message?: string) {
+    const defaultMessage = `AccessControl setup incorrectly. Please set grants before usage`;
+    super(message || defaultMessage);
+  }
 }

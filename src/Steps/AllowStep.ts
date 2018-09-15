@@ -1,9 +1,8 @@
 import debug from 'debug';
-
 import each from 'lodash.foreach';
 import isEqual from 'lodash.isequal';
 
-import AccessControlError from '../Errors/AccessControlError';
+import RoleNotFoundError from '../Errors/RoleNotFoundError';
 import { Grants, Permissions, Roles } from '../types';
 import Step from './Step';
 
@@ -11,11 +10,7 @@ const log = debug('acl:allow');
 
 export default class AllowStep extends Step {
   toExtend(roleNameToExtend: string): void {
-    if (!this.parent.hasRoles(this)) {
-      throw new AccessControlError(
-        `AccessControl setup incorrectly. Please set grants before using it`,
-      );
-    }
+    this.checkRolesExist();
 
     const roles: Roles = this.parent.getRoles(this);
 
@@ -29,9 +24,7 @@ export default class AllowStep extends Step {
     }
 
     if (!roles[roleNameToExtend]) {
-      throw new AccessControlError(
-        `Cannot extend ${roleNameToExtend} role because it could not be found in roles`,
-      );
+      throw new RoleNotFoundError(roleNameToExtend);
     }
 
     const primaryRolePermissions: Permissions = roles[this.query.role!];
