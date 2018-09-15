@@ -3,9 +3,6 @@ version: "2"
 plugins:
   markdownlint:
     enabled: true
-  tslint:
-    enabled: true
-    config: tslint.json
 
 exclude_patterns:
   - ".github/"                                      # Exclude GitHub issue templates
