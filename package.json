@@ -25,6 +25,7 @@
   "scripts": {
     "commit": "git-cz",
     "build": "rimraf dist/ && tsc",
+    "build:docs": "rimraf docs/api && typedoc --out docs/api --target es6 --theme minimal --mode file src",
     "build:watch": "tsc --watch",
     "lint": "tslint -p tsconfig.json -t codeFrame 'src/**/*.ts' -e 'src/**/*.spec.ts'",
     "pretest": "rimraf coverage/",
@@ -65,6 +66,7 @@
     "tslint": "^5",
     "tslint-config-esg": "github:EndemolShineGroup/tslint-config-esg",
     "tslint-config-prettier": "^1",
+    "typedoc": "^0.12.0",
     "typescript": "^3"
   },
   "publishConfig": {
