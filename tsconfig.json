@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "declaration": true,
     "esModuleInterop": true,
-    "target": "es5",
     "lib": [
       "ES2015",
       "ES2016",
@@ -10,10 +10,11 @@
       "ES2018"
     ],
     "module": "commonjs",
-    "declaration": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "target":"ES2018"
   },
   "include": [
     "src/**/*.ts"
