@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/EndemolShineGroup/acl/compare/v1.1.0...v1.1.1) (2018-09-16)
+
+
+### Bug Fixes
+
+* **npm:** fix main and types paths in package.json ([d74fcc2](https://github.com/EndemolShineGroup/acl/commit/d74fcc2))
+
 # [1.1.0](https://github.com/EndemolShineGroup/acl/compare/v1.0.0...v1.1.0) (2018-09-14)
 
 
