@@ -1,8 +1,8 @@
-import Error from './Error';
+import AbstractError from './AbstractError';
 
 type ActionType = 'deny' | 'grant';
 
-export default class PermissionNotFoundError extends Error {
+export default class PermissionNotFoundError extends AbstractError {
   constructor(
     roleName: string,
     permission?: string,

@@ -1,6 +1,6 @@
-import Error from './Error';
+import AbstractError from './AbstractError';
 
-export default class RoleNotFoundError extends Error {
+export default class RoleNotFoundError extends AbstractError {
   constructor(roleName: string, extraInfo?: string) {
     let message = `Role ${roleName} does not exist`;
 

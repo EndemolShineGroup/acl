@@ -1,8 +1,8 @@
-import Error from './Error';
+import AbstractError from './AbstractError';
 
-class ConcreteError extends Error {}
+class ConcreteError extends AbstractError {}
 
-describe('Error', () => {
+describe('AbstractError', () => {
   it('returns an object containing the error properties', () => {
     const error = new ConcreteError('An error');
     expect(error.toObject()).toEqual({
