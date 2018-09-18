@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/EndemolShineGroup/acl/compare/v1.1.1...v1.1.2) (2018-09-18)
+
+
+### Bug Fixes
+
+* use named export for AccessControl ([d92cd37](https://github.com/EndemolShineGroup/acl/commit/d92cd37))
+
 ## [1.1.1](https://github.com/EndemolShineGroup/acl/compare/v1.1.0...v1.1.1) (2018-09-16)
 
 
