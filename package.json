@@ -55,7 +55,7 @@
     "@types/lodash.isequal": "^4",
     "@types/lodash.omit": "^4",
     "@types/node": "^10",
-    "commitizen": "^2",
+    "commitizen": "^3.0.2",
     "husky": "^1.0.0-rc.14",
     "jest": "^23",
     "lint-staged": "^7",
