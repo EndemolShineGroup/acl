@@ -6,8 +6,6 @@
 
 ## What did you implement:
 
-Closes #XXXXX
-
 <!--
 Briefly describe the feature if no issue exists for this PR
 -->
@@ -37,6 +35,7 @@ Examples:
 - [ ] Provide verification config / commands / resources
 - [X] Enable "Allow edits from maintainers" for this PR
 - [ ] Update the messages below
+
 
 ***Is this ready for review?:*** NO
 ***Is it a breaking change?:*** NO

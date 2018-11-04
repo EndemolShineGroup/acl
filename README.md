@@ -1,4 +1,4 @@
-# acl
+![Banner][icon-banner]
 
 [![MIT Licensed][icon-license]][link-license]
 [![NPM Version][icon-npm]][link-npm]
@@ -14,17 +14,17 @@
 [![Semantic Release][icon-semantic-release]][link-semantic-release]
 [![Prettier][icon-prettier]][link-prettier]
 
-Fully-tested AccessControl implementation written in TypeScript.
+An Access Control library for multi-tenant systems
 
 ## Installation
 
-`yarn add @endemolshinegroup/acl`
-or
-`npm i @endemolshinegroup/acl --save`
+```bash
+yarn add @endemolshinegroup/acl
+```
 
 ## Usage
 
-```
+```typescript
 const roles = {
   User: {
     GetUsers: {
@@ -64,6 +64,8 @@ ac.getRolesList();
 // Retrieving permissions for role
 ac.getPermissions(role: string);
 ```
+
+[icon-banner]: docs/assets/banner.png
 
 [icon-license]: https://img.shields.io/github/license/EndemolShineGroup/acl.svg?longCache=true&style=flat-square
 [link-license]: LICENSE
