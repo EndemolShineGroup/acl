@@ -29,19 +29,21 @@
     "lint": "tslint -p tsconfig.json -t codeFrame 'src/**/*.ts' -e 'src/**/*.spec.ts'"
   },
   "dependencies": {
+    "@types/lodash.uniq": "^4.5.4",
     "debug": "^4.0.1",
     "lodash.clonedeep": "^4",
     "lodash.foreach": "^4",
     "lodash.isempty": "^4",
     "lodash.isequal": "^4",
     "lodash.omit": "^4",
+    "lodash.uniq": "^4.5.0",
     "make-error": "^1",
     "tslib": "^1.9.3"
   },
   "devDependencies": {
     "@commitlint/cli": "^7",
     "@commitlint/config-conventional": "^7",
-    "@endemolshinegroup/cz-github": "^1",
+    "@endemolshinegroup/cz-github": "^1.0.5",
     "@endemolshinegroup/prettier-config": "^1",
     "@endemolshinegroup/tslint-config": "^1",
     "@semantic-release/changelog": "^3",
