@@ -1,16 +1,15 @@
-import cloneDeep from 'lodash.clonedeep';
-import isEmpty from 'lodash.isempty';
-import omit from 'lodash.omit';
-
+// Stores
+// Errors
 import AccessControlError from './Errors/AccessControlError';
-import PermissionNotFoundError from './Errors/PermissionNotFoundError';
-import RoleNotFoundError from './Errors/RoleNotFoundError';
+// Resolvers
+import RolesResolver from './Resolvers/RolesResolver';
+import RolesStore from './RolesStore';
+// Steps
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
-import DoesAnyStep from './Steps/DoesAnyStep';
 import DoesStep from './Steps/DoesStep';
 import GrantStep from './Steps/GrantStep';
-import Step from './Steps/Step';
+// Types
 import { Permissions, Roles } from './types';
 
 export default class AccessControl {
@@ -19,75 +18,74 @@ export default class AccessControl {
   // tslint:disable-next-line:no-unused-variable
   private roles: Roles = {};
 
-  private modifiedRoles: Roles = {};
+  private rolesStore: RolesStore;
 
   constructor(roles?: Roles) {
     if (roles) {
       this.roles = roles;
-      this.modifiedRoles = roles;
     }
+
+    this.rolesStore = new RolesStore(roles);
   }
 
-  getRoles(internal: Step | null = null): Roles {
-    if (!this.hasRoles() && !internal) {
+  getRoles(): Roles {
+    if (!this.rolesStore.hasRoles()) {
       throw new AccessControlError();
     }
 
-    return cloneDeep(this.modifiedRoles);
+    return this.rolesStore.getRoles();
   }
 
   getRolesList(): string[] {
-    return Object.keys(this.modifiedRoles);
+    return this.rolesStore.getRolesList();
   }
 
   getPermissions(role: string): Permissions | null {
-    if (isEmpty(this.modifiedRoles[role])) {
-      throw new PermissionNotFoundError(role);
-    }
-
-    return this.modifiedRoles[role];
+    return this.rolesStore.getPermissions(role);
   }
 
-  setRoles(grants: Roles): void {
-    this.roles = grants;
-    this.modifiedRoles = grants;
+  setRoles(roles: Roles): void {
+    this.roles = roles;
+    this.rolesStore.setRoles(roles);
   }
 
   // Steps
-  does(role: string): DoesStep {
-    return new DoesStep({ role }, this);
+  does(...roles: string[]): DoesStep {
+    return new DoesStep(
+      { roles: RolesResolver(this.rolesStore, roles) },
+      this.rolesStore,
+    );
   }
 
-  doesAny(roles: string[]): DoesAnyStep {
-    return new DoesAnyStep({ role: '', roles }, this);
+  doesAny(...roles: string[]): DoesStep {
+    return new DoesStep(
+      { roles: RolesResolver(this.rolesStore, roles), any: true },
+      this.rolesStore,
+    );
   }
 
-  allow(role: string): AllowStep {
-    return new AllowStep({ role }, this);
+  allow(...roles: string[]): AllowStep {
+    return new AllowStep(
+      { roles: RolesResolver(this.rolesStore, roles) },
+      this.rolesStore,
+    );
   }
 
-  grant(role: string): GrantStep {
-    return new GrantStep({ role }, this);
+  grant(...roles: string[]): GrantStep {
+    return new GrantStep(
+      { roles: RolesResolver(this.rolesStore, roles) },
+      this.rolesStore,
+    );
   }
 
-  deny(role: string): DenyStep {
-    return new DenyStep({ role }, this);
+  deny(...roles: string[]): DenyStep {
+    return new DenyStep(
+      { roles: RolesResolver(this.rolesStore, roles) },
+      this.rolesStore,
+    );
   }
 
-  remove(role: string): void {
-    if (!this.hasRoles(this)) {
-      throw new AccessControlError();
-    }
-
-    this.modifiedRoles = omit(this.modifiedRoles, [role]);
-  }
-
-  // Internal methods
-  modifyRoles(roles: Roles, internal: Step): void {
-    this.modifiedRoles = roles;
-  }
-
-  hasRoles(internal?: Step | AccessControl): boolean {
-    return !isEmpty(this.modifiedRoles);
+  remove(...roles: string[]): void {
+    this.rolesStore.removeRoles(roles);
   }
 }
