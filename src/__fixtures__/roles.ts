@@ -9,7 +9,7 @@ const GrantsObj: Roles = {
     },
     SaveUsers: {
       dev: false,
-      staging: false,
+      staging: true,
       prod: false,
     },
   },
