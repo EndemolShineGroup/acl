@@ -1,4 +1,6 @@
 import ACL from './AccessControl';
-export const AccessControl = ACL;
+const AccessControl = ACL;
+
+export default AccessControl;
 
 export * from './types';
