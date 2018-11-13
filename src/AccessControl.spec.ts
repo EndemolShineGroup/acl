@@ -14,14 +14,46 @@ describe('Access Control', () => {
     ACWithoutGrants = new AccessControl();
   });
 
-  it('`getRoles()` should return the data passed in the constructor', () => {
-    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
+  describe('DENY TESTS', () => {
+    it('permission denied should return false', () => {
+      ACWithGrants.deny('Admin')
+        .permission('SaveUsers')
+        .for('prod');
+
+      expect(
+        ACWithGrants.does('Admin')
+          .havePermissions('SaveUsers')
+          .for('prod'),
+      ).toBeFalsy();
+    });
+
+    it('passing a role that does not exist should error', () => {
+      expect(() => {
+        ACWithGrants.deny('A_FAKE_ROLE')
+          .permission('SaveUsers')
+          .for('prod');
+      }).toThrow(RoleNotFoundError);
+    });
+
+    it('passing a permission that does not exist should error', () => {
+      expect(() => {
+        ACWithGrants.deny('Admin')
+          .permission('A_FAKE_PERMISSION')
+          .for('prod');
+      }).toThrow(PermissionNotFoundError);
+    });
   });
 
-  it('`getRoles()` should return the data passed in via `setRoles()`', () => {
-    ACWithoutGrants.setRoles(rolesFixture);
+  describe('A TEST', () => {
+    it('`getRoles()` should return the data passed in the constructor', () => {
+      expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
+    });
 
-    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
+    it('`getRoles()` should return the data passed in via `setRoles()`', () => {
+      ACWithoutGrants.setRoles(rolesFixture);
+
+      expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
+    });
   });
 
   it('`getRoles()` should throw an AccessControlError if no grants were passed to AccessControl', () => {
@@ -33,7 +65,7 @@ describe('Access Control', () => {
   it('get permission should return false', () => {
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('dev'),
     ).toBeFalsy();
   });
@@ -41,8 +73,40 @@ describe('Access Control', () => {
   it('get permission should return true', () => {
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('prod'),
+    ).toBeTruthy();
+  });
+
+  it('get permission should return false (strict ALL)', () => {
+    expect(
+      ACWithGrants.does('User')
+        .havePermissions('GetUsers')
+        .for('prod', 'dev'),
+    ).toBeTruthy();
+  });
+
+  it('get permission should return true (* roles)', () => {
+    expect(
+      ACWithGrants.does('*')
+        .havePermissions('SaveUsers')
+        .for('staging'),
+    ).toBeTruthy();
+  });
+
+  it('get permission should return false (* permissions)', () => {
+    expect(
+      ACWithGrants.does('User')
+        .havePermissions('*')
+        .for('staging'),
+    ).toBeTruthy();
+  });
+
+  it('get permission should return false (* permissions)', () => {
+    expect(
+      ACWithGrants.does('*')
+        .havePermissions('*')
+        .for('*'),
     ).toBeTruthy();
   });
 
@@ -53,7 +117,7 @@ describe('Access Control', () => {
 
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('dev'),
     ).toBeTruthy();
   });
@@ -136,32 +200,32 @@ describe('Access Control', () => {
 
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('dev'),
     ).toBeTruthy();
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('staging'),
     ).toBeTruthy();
     expect(
       ACWithGrants.does('User')
-        .havePermission('GetUsers')
+        .havePermissions('GetUsers')
         .for('prod'),
     ).toBeTruthy();
     expect(
       ACWithGrants.does('User')
-        .havePermission('SaveUsers')
+        .havePermissions('SaveUsers')
         .for('dev'),
     ).toBeTruthy();
     expect(
       ACWithGrants.does('User')
-        .havePermission('SaveUsers')
+        .havePermissions('SaveUsers')
         .for('staging'),
     ).toBeTruthy();
     expect(
       ACWithGrants.does('User')
-        .havePermission('SaveUsers')
+        .havePermissions('SaveUsers')
         .for('prod'),
     ).toBeFalsy();
   });
@@ -191,21 +255,9 @@ describe('Access Control', () => {
     // In `dev` prod is false but `admin` is true, extending `dev` should not make the value false
     expect(
       ACWithGrants.does('Admin')
-        .havePermission('SaveUsers')
+        .havePermissions('SaveUsers')
         .for('prod'),
     ).toBeTruthy();
-  });
-
-  it('permission denied should return false', () => {
-    ACWithGrants.deny('Admin')
-      .permission('SaveUsers')
-      .for('prod');
-
-    expect(
-      ACWithGrants.does('Admin')
-        .havePermission('SaveUsers')
-        .for('prod'),
-    ).toBeFalsy();
   });
 
   // @TODO Shouldn't this just throw an error?
@@ -214,23 +266,23 @@ describe('Access Control', () => {
 
     expect(
       ACWithGrants.does('User')
-        .havePermission('SaveUsers')
+        .havePermissions('SaveUsers')
         .for('prod'),
     ).toBeFalsy();
   });
 
   it('should return true when calling `DoesAny` with User and Admin for SaveUser.prod', () => {
     expect(
-      ACWithGrants.doesAny(['User', 'Admin'])
-        .havePermission('SaveUsers')
+      ACWithGrants.doesAny('User', 'Admin')
+        .havePermissions('SaveUsers')
         .for('prod'),
     ).toBeTruthy();
   });
 
   it('should return false when calling `DoesAny` with User and Dev for SaveUser.prod', () => {
     expect(
-      ACWithGrants.doesAny(['User', 'Dev'])
-        .havePermission('SaveUsers')
+      ACWithGrants.doesAny('User', 'Dev')
+        .havePermissions('SaveUsers')
         .for('prod'),
     ).toBeFalsy();
   });
@@ -261,7 +313,7 @@ describe('Access Control', () => {
       },
       SaveUsers: {
         dev: false,
-        staging: false,
+        staging: true,
         prod: false,
       },
     });
