@@ -341,8 +341,8 @@ describe('Access Control', () => {
     expect(result.NEW_ROLE).toEqual({
       NEW_PERMISSION: {
         dev: true,
-        staging: true,
         prod: false,
+        staging: true,
       },
     });
   });
