@@ -1,8 +1,20 @@
 import HaveStep from './HaveStep';
 import Step from './Step';
 
+import PermissionsResolver from '../Resolvers/PermissionResolver';
+
 export default class DoesStep extends Step {
-  havePermission(permission: string): HaveStep {
-    return new HaveStep({ ...this.query, permission }, this.parent);
+  havePermissions(...permissions: string[]): HaveStep {
+    return new HaveStep(
+      {
+        ...this.query,
+        permissions: PermissionsResolver(
+          this.rolesStore,
+          this.query.roles!,
+          ...permissions,
+        ),
+      },
+      this.rolesStore,
+    );
   }
 }
