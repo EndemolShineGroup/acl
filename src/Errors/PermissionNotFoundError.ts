@@ -3,11 +3,7 @@ import AbstractError from './AbstractError';
 type ActionType = 'deny' | 'grant';
 
 export default class PermissionNotFoundError extends AbstractError {
-  constructor(
-    roleName: string,
-    permission?: string,
-    action: ActionType = 'deny',
-  ) {
+  constructor(roleName: string, permission?: string, action?: ActionType) {
     let message = `No permissions found for ${roleName}`;
 
     if (action) {
