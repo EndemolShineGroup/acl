@@ -50,7 +50,7 @@ describe('PermissionCheckStep', () => {
     expect(pcs.hasPermission()).toBeFalsy();
   });
 
-  it('Bad query permission without `any`, should return false', () => {
+  it('should return false when passing a bad query permission without `any`', () => {
     const query: GrantQuery = {
       roles: ['Admin'],
       permissions: ['A_FAKE_ROLE'],
