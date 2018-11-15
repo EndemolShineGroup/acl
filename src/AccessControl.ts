@@ -1,9 +1,9 @@
-// Stores
+//Stores
+import RolesStore from './RolesStore';
 // Errors
 import AccessControlError from './Errors/AccessControlError';
 // Resolvers
 import RolesResolver from './Resolvers/RolesResolver';
-import RolesStore from './RolesStore';
 // Steps
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
