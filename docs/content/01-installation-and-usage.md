@@ -11,7 +11,7 @@ or
 ## Usage
 
 ```typescript
-import { AccessControl } from '@endemolshinegroup/acl'; 
+import AccessControl from '@endemolshinegroup/acl';
 
 const roles = {
   users: {

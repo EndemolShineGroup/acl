@@ -25,6 +25,8 @@ yarn add @endemolshinegroup/acl
 ## Usage
 
 ```typescript
+import AccessControl from '@endemolshinegroup/acl';
+
 const roles = {
   User: {
     GetUsers: {
