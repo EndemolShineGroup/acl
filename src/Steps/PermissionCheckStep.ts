@@ -60,7 +60,7 @@ export default class PermissionCheckStep extends Step {
         roleName,
       );
     });
-  };
+  }
 
   hasPermission(): boolean {
     try {
