@@ -81,7 +81,7 @@ describe('Access Control', () => {
       ACWithGrants.does('User')
         .havePermissions('GetUsers')
         .for('prod', 'dev'),
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
   it('should return true when getting permission (* roles)', () => {
@@ -97,13 +97,21 @@ describe('Access Control', () => {
       ACWithGrants.does('User')
         .havePermissions('*')
         .for('staging'),
-    ).toBeTruthy();
+    ).toBeFalsy();
   });
 
   it('should return false when getting permission (* permissions)', () => {
     expect(
       ACWithGrants.does('*')
         .havePermissions('*')
+        .for('*'),
+    ).toBeFalsy();
+  });
+
+  it('should return true when getting permission any (* envs)', () => {
+    expect(
+      ACWithGrants.doesAny('User')
+        .havePermissions('GetUsers')
         .for('*'),
     ).toBeTruthy();
   });

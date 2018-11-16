@@ -11,7 +11,9 @@ export default function PermissionResolver(
     permissions = [];
 
     roles.forEach((role: string) => {
-      permissions.concat(Object.keys(rolesStore.getPermissions(role)!));
+      permissions = permissions.concat(
+        Object.keys(rolesStore.getPermissions(role)!),
+      );
     });
   }
 
