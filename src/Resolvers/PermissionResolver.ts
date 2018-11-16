@@ -1,6 +1,6 @@
-import RolesStore from '../RolesStore';
-
 import uniq from 'lodash.uniq';
+
+import RolesStore from '../RolesStore';
 
 export default function PermissionResolver(
   rolesStore: RolesStore,

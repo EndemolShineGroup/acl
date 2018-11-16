@@ -1,15 +1,11 @@
+import rolesFixture from '../__fixtures__/roles';
+import AccessControlError from '../Errors/AccessControlError';
+import RolesStore from '../RolesStore';
+import { GrantQuery } from '../types';
 import PermissionCheckStep from './PermissionCheckStep';
 
-import RolesStore from '../RolesStore';
-
-import AccessControlError from '../Errors/AccessControlError';
-
-import rolesFixture from '../__fixtures__/roles';
-
-import { GrantQuery } from '../types';
-
 describe('PermissionCheckStep', () => {
-  it('throw error if `rolesStore` is not setup when calling `hasPermission`', () => {
+  it('should throw error if `rolesStore` is not setup when calling `hasPermission`', () => {
     const pcs: PermissionCheckStep = new PermissionCheckStep(
       {},
       new RolesStore(),
@@ -18,7 +14,7 @@ describe('PermissionCheckStep', () => {
     expect(pcs.hasPermission()).toBeFalsy();
   });
 
-  it('Simple valid query, should return true', () => {
+  it('should return true when passing a simple valid query', () => {
     const query: GrantQuery = {
       roles: ['Admin'],
       permissions: ['GetUsers'],
@@ -34,7 +30,7 @@ describe('PermissionCheckStep', () => {
     expect(pcs.hasPermission()).toBeTruthy();
   });
 
-  it('Bad query role, should return false', () => {
+  it('should return false when passing a bad query role, ', () => {
     const query: GrantQuery = {
       roles: ['A_FAKE_ROLE'],
       permissions: ['GetUsers'],
@@ -50,7 +46,7 @@ describe('PermissionCheckStep', () => {
     expect(pcs.hasPermission()).toBeFalsy();
   });
 
-  it('Bad query permission without `any`, should return false', () => {
+  it('should return false when passing a bad query permission without `any`', () => {
     const query: GrantQuery = {
       roles: ['Admin'],
       permissions: ['A_FAKE_ROLE'],
@@ -66,7 +62,7 @@ describe('PermissionCheckStep', () => {
     expect(pcs.hasPermission()).toBeFalsy();
   });
 
-  it('Bad query permission with `any`, should return false', () => {
+  it(' should return false when passing a bad query permission with `any`', () => {
     const query: GrantQuery = {
       roles: ['Admin'],
       permissions: ['A_FAKE_ROLE'],

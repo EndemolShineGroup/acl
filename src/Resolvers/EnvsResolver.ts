@@ -1,8 +1,7 @@
-import RolesStore from '../RolesStore';
-
-import { Grants } from '../types';
-
 import uniq from 'lodash.uniq';
+
+import RolesStore from '../RolesStore';
+import { Grants } from '../types';
 
 export default function EnvsResolver(
   rolesStore: RolesStore,
