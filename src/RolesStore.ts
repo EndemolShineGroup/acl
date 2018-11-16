@@ -2,10 +2,8 @@ import cloneDeep from 'lodash.clonedeep';
 import isEmpty from 'lodash.isempty';
 import omit from 'lodash.omit';
 
-// Errors
 import PermissionNotFoundError from './Errors/PermissionNotFoundError';
 
-// Types
 import { Permissions, Roles } from './types';
 
 export default class RolesStore {

@@ -15,7 +15,7 @@ describe('Access Control', () => {
   });
 
   describe('DENY TESTS', () => {
-    it('permission denied should return false', () => {
+    it('should return false when permission denied', () => {
       ACWithGrants.deny('Admin')
         .permission('SaveUsers')
         .for('prod');
@@ -27,7 +27,7 @@ describe('Access Control', () => {
       ).toBeFalsy();
     });
 
-    it('passing a role that does not exist should error', () => {
+    it('should error when passing a role that does not exist', () => {
       expect(() => {
         ACWithGrants.deny('A_FAKE_ROLE')
           .permission('SaveUsers')
@@ -35,7 +35,7 @@ describe('Access Control', () => {
       }).toThrow(RoleNotFoundError);
     });
 
-    it('passing a permission that does not exist should error', () => {
+    it('should error when passing a permission that does not exist', () => {
       expect(() => {
         ACWithGrants.deny('Admin')
           .permission('A_FAKE_PERMISSION')
@@ -44,25 +44,23 @@ describe('Access Control', () => {
     });
   });
 
-  describe('A TEST', () => {
-    it('`getRoles()` should return the data passed in the constructor', () => {
-      expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
-    });
-
-    it('`getRoles()` should return the data passed in via `setRoles()`', () => {
-      ACWithoutGrants.setRoles(rolesFixture);
-
-      expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
-    });
+  it('should return  the data passed in the constructor when calling `getRoles()`', () => {
+    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
   });
 
-  it('`getRoles()` should throw an AccessControlError if no grants were passed to AccessControl', () => {
+  it('should return the data passed in via `setRoles()` when calling `getRoles()`', () => {
+    ACWithoutGrants.setRoles(rolesFixture);
+
+    expect(ACWithGrants.getRoles()).toEqual(rolesFixture);
+  });
+
+  it('should throw an `AccessControlError` if no grants were passed to AccessControl when calling `getRoles()`', () => {
     expect(() => {
       ACWithoutGrants.getRoles();
     }).toThrow(AccessControlError);
   });
 
-  it('get permission should return false', () => {
+  it('should return false when getting permission', () => {
     expect(
       ACWithGrants.does('User')
         .havePermissions('GetUsers')
@@ -70,7 +68,7 @@ describe('Access Control', () => {
     ).toBeFalsy();
   });
 
-  it('get permission should return true', () => {
+  it('should return true when getting permission', () => {
     expect(
       ACWithGrants.does('User')
         .havePermissions('GetUsers')
@@ -78,7 +76,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('get permission should return false (strict ALL)', () => {
+  it('should return false when getting permission (strict ALL)', () => {
     expect(
       ACWithGrants.does('User')
         .havePermissions('GetUsers')
@@ -86,7 +84,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('get permission should return true (* roles)', () => {
+  it('should return true when getting permission (* roles)', () => {
     expect(
       ACWithGrants.does('*')
         .havePermissions('SaveUsers')
@@ -94,7 +92,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('get permission should return false (* permissions)', () => {
+  it('should return false when getting permission (* permissions)', () => {
     expect(
       ACWithGrants.does('User')
         .havePermissions('*')
@@ -102,7 +100,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('get permission should return false (* permissions)', () => {
+  it('should return false when getting permission (* permissions)', () => {
     expect(
       ACWithGrants.does('*')
         .havePermissions('*')
@@ -110,7 +108,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('grant permission should return true', () => {
+  it('should return true when granting permission', () => {
     ACWithGrants.grant('User')
       .permission('GetUsers')
       .for('dev');
@@ -122,7 +120,7 @@ describe('Access Control', () => {
     ).toBeTruthy();
   });
 
-  it('grant permission to a new role should create role with all true stages', () => {
+  it('should create role with all true stages when granting permission to a new role', () => {
     ACWithGrants.grant('Test')
       .permission('GetUsers')
       .for('dev', 'staging', 'prod');
@@ -138,7 +136,7 @@ describe('Access Control', () => {
     });
   });
 
-  it('grant permission to a new role should create role with all false stages', () => {
+  it('should create role with all false stages when granting permission to a new roles', () => {
     ACWithGrants.grant('Test')
       .permission('GetUsers')
       .for();
@@ -176,7 +174,7 @@ describe('Access Control', () => {
     });
   });
 
-  it('extending NEW role 1 should have all permissions existing role 2 has', () => {
+  it('should have all permissions role 2 has when extending NEW role 1', () => {
     ACWithGrants.allow('Test').toExtend('Dev');
 
     const result = ACWithGrants.getRoles();
@@ -195,7 +193,7 @@ describe('Access Control', () => {
     });
   });
 
-  it('extending role 1 should have all permissions role 2 has', () => {
+  it('should have all permissions role 2 has when extending role 1', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
     expect(
@@ -230,7 +228,7 @@ describe('Access Control', () => {
     ).toBeFalsy();
   });
 
-  it('extending role 1 should have all permissions role 2 has', () => {
+  it('should have all permissions role 2 has when extending role 1', () => {
     ACWithGrants.allow('User').toExtend('Dev');
 
     const result = ACWithGrants.getRoles();
@@ -249,7 +247,7 @@ describe('Access Control', () => {
     });
   });
 
-  it('extending role 1 should not have permissions stripped if role 2 doesnt have', () => {
+  it('should not have permissions stripped if role 2 doesnt have when extending role 1', () => {
     ACWithGrants.allow('Admin').toExtend('Dev');
 
     // In `dev` prod is false but `admin` is true, extending `dev` should not make the value false
