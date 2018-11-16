@@ -14,7 +14,7 @@ export default function EnvsResolver(
 
     roles.forEach((role: string) => {
       Object.keys(rolesStore.getPermissions(role)!).forEach((key: string) => {
-        envs.concat(Object.keys(rolesStore.getPermissions(role)![key]));
+        envs = envs.concat(Object.keys(rolesStore.getPermissions(role)![key]));
       });
     });
   }
