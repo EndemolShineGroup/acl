@@ -1,11 +1,67 @@
 import debug from 'debug';
 
-import { GrantQuery, Grants, Permissions, Roles } from '../types';
+import { GrantQuery, Permissions } from '../types';
 import Step from './Step';
 
 const log = debug('acl:permission-check');
 
 export default class PermissionCheckStep extends Step {
+  roleHasPermissionInEnvironment = (
+    rolesPermissions: Permissions,
+    permission: string,
+    environment: string,
+    roleName: string,
+  ) => {
+    if (!rolesPermissions[permission]) {
+      log(
+        `AccessControl Error: ${permission} permission could not be found for ${roleName} role`,
+      );
+    }
+    return (
+      rolesPermissions[permission] && rolesPermissions[permission][environment]
+    );
+  };
+
+  roleHasPermissionInEveryEnvironment = (
+    rolesPermissions: Permissions,
+    permission: string,
+    environments: string[],
+    roleName: string,
+  ) => {
+    const filter = this.query.any ? 'some' : 'every';
+    return environments[filter]((environment) => {
+      return this.roleHasPermissionInEnvironment(
+        rolesPermissions,
+        permission,
+        environment,
+        roleName,
+      );
+    });
+  };
+
+  roleHasEveryPermission = (
+    roleName: string,
+    permissions: string[],
+    environments: string[],
+  ): boolean => {
+    let rolePermissions = this.rolesStore.getRoles()[roleName];
+    if (!rolePermissions) {
+      log(`AccessControl Error: ${roleName} role could not be found in grants`);
+      return false;
+    }
+
+    const filter = this.query.any ? 'some' : 'every';
+
+    return permissions[filter]((permission: string) => {
+      return this.roleHasPermissionInEveryEnvironment(
+        rolePermissions,
+        permission,
+        environments,
+        roleName,
+      );
+    });
+  };
+
   hasPermission(): boolean {
     try {
       this.checkRolesExist();
@@ -13,78 +69,14 @@ export default class PermissionCheckStep extends Step {
       return false;
     }
 
-    const roles: Roles = this.rolesStore.getRoles();
-
     const query = this.query as GrantQuery;
-
-    for (let i: number = 0; i < query.roles.length; i++) {
-      const roleName = query.roles[i];
-      const role: Permissions = roles[roleName];
-
-      if (!role) {
-        log(
-          `AccessControl Error: ${roleName} role could not be found in grants`,
-        );
-        return false;
-      }
-
-      const permissionsOutcome = this.matchPermissions(role, query, roleName);
-      if (permissionsOutcome !== null) {
-        return permissionsOutcome;
-      }
-    }
-
-    return !query.any;
-  }
-
-  matchPermissions = (
-    role: Permissions,
-    query: GrantQuery,
-    roleName: string,
-  ) => {
-    for (let j: number = 0; j < query.permissions.length; j++) {
-      if (!role[query.permissions[j]]) {
-        if (!query.any) {
-          log(
-            `AccessControl Error: ${
-              query.permissions[j]
-            } permission could not be found for ${roleName} role`,
-          );
-          return false;
-        }
-
-        continue;
-      }
-
-      const rolesOutcome = this.matchRoles(
-        role[query.permissions[j]],
+    const filter = query.any ? 'some' : 'every';
+    return query.roles[filter]((role) => {
+      return this.roleHasEveryPermission(
+        role,
+        query.permissions,
         query.environments,
-        query.any,
       );
-
-      if (rolesOutcome !== null) {
-        return rolesOutcome;
-      }
-    }
-
-    return null;
-  };
-
-  matchRoles = (permission: Grants, envs: string[], any?: boolean) => {
-    for (let i: number = 0; i < envs.length; i++) {
-      if (!permission[envs[i]]) {
-        if (!any) {
-          return false;
-        }
-
-        continue;
-      }
-
-      if (permission[envs[i]] && any) {
-        return true;
-      }
-    }
-
-    return null;
-  };
+    });
+  }
 }
