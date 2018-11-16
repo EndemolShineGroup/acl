@@ -14,10 +14,10 @@ export interface Roles {
 }
 
 export interface GrantQuery {
-  role: string;
-  permission: string;
-  environment: string;
-  roles?: string[];
+  roles: string[];
+  permissions: string[];
+  environments: string[];
+  any?: boolean;
 }
 
 // Basic types
