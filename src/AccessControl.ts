@@ -1,10 +1,24 @@
+<<<<<<< 2976752864c13dd800f7ee8f7f0f4641ec1816ee
 import AccessControlError from './Errors/AccessControlError';
 import RolesResolver from './Resolvers/RolesResolver';
 import RolesStore from './RolesStore';
+=======
+// Stores
+// Errors
+import AccessControlError from './Errors/AccessControlError';
+// Resolvers
+import RolesResolver from './Resolvers/RolesResolver';
+import RolesStore from './RolesStore';
+// Steps
+>>>>>>> refactor(acl): move roles handling from accesscontrol
 import AllowStep from './Steps/AllowStep';
 import DenyStep from './Steps/DenyStep';
 import DoesStep from './Steps/DoesStep';
 import GrantStep from './Steps/GrantStep';
+<<<<<<< 2976752864c13dd800f7ee8f7f0f4641ec1816ee
+=======
+// Types
+>>>>>>> refactor(acl): move roles handling from accesscontrol
 import { Permissions, Roles } from './types';
 
 export default class AccessControl {
