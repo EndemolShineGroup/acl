@@ -67,7 +67,7 @@ describe('PermissionCheckStep', () => {
   });
 
   describe('roleHasPermissionInEnvironment', () => {
-    it('should return true if role does have permission in environement', () => {
+    it('should return true if role does have permission in environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasPermissionInEnvironment(
@@ -79,7 +79,7 @@ describe('PermissionCheckStep', () => {
       ).toBeTruthy();
     });
 
-    it('should return false if role does have permission in environement', () => {
+    it('should return false if role does NOT have permission in environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasPermissionInEnvironment(
@@ -93,7 +93,7 @@ describe('PermissionCheckStep', () => {
   });
 
   describe('roleHasPermissionInEveryEnvironment', () => {
-    it('should return true if role does have permission in every environement', () => {
+    it('should return true if role does have permission in every environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasPermissionInEveryEnvironment(
@@ -105,7 +105,7 @@ describe('PermissionCheckStep', () => {
       ).toBeTruthy();
     });
 
-    it('should return false if role does have permission in every environement', () => {
+    it('should return false if role does NOT have permission in every environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasPermissionInEveryEnvironment(
@@ -115,11 +115,26 @@ describe('PermissionCheckStep', () => {
           'Dev',
         ),
       ).toBeFalsy();
+    });
+
+    it('should return true if role does have permission in one of the environments and "any" is set', () => {
+      const pcs = new PermissionCheckStep(
+        { any: true },
+        new RolesStore(rolesFixture),
+      );
+      expect(
+        pcs.roleHasPermissionInEveryEnvironment(
+          rolesFixture['Dev'],
+          'SaveUsers',
+          ['dev', 'staging', 'prod'],
+          'Dev',
+        ),
+      ).toBeTruthy();
     });
   });
 
   describe('roleHasEveryPermission', () => {
-    it('should return true if role does have every permission in every environement', () => {
+    it('should return true if role does have every permission in every environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasEveryPermission(
@@ -130,7 +145,7 @@ describe('PermissionCheckStep', () => {
       ).toBeTruthy();
     });
 
-    it('should return false if role does have every permission in every environement', () => {
+    it('should return false if role does NOT have every permission in every environment', () => {
       const pcs = new PermissionCheckStep({}, new RolesStore(rolesFixture));
       expect(
         pcs.roleHasEveryPermission(
@@ -139,6 +154,20 @@ describe('PermissionCheckStep', () => {
           ['dev', 'staging', 'prod'],
         ),
       ).toBeFalsy();
+    });
+
+    it('should return true if role does have one of the permissions in at least one of the environments when "any" is set', () => {
+      const pcs = new PermissionCheckStep(
+        { any: true },
+        new RolesStore(rolesFixture),
+      );
+      expect(
+        pcs.roleHasEveryPermission(
+          'Dev',
+          ['SaveUsers', 'GetUsers'],
+          ['dev', 'staging', 'prod'],
+        ),
+      ).toBeTruthy();
     });
   });
 });
