@@ -1,10 +1,6 @@
 import debug from 'debug';
 
-<<<<<<< 848cb08c2cc48ff0a7a7fea4f18fd5862bd3f82c
 import { GrantQuery, Permissions } from '../types';
-=======
-import { GrantQuery, Grants, Permissions, Roles } from '../types';
->>>>>>> fix(access control): bunch of small fixes
 import Step from './Step';
 
 const log = debug('acl:permission-check');
@@ -64,7 +60,7 @@ export default class PermissionCheckStep extends Step {
         roleName,
       );
     });
-  }
+  };
 
   hasPermission(): boolean {
     try {
