@@ -1,7 +1,7 @@
 {
   "name": "@endemolshinegroup/acl",
   "description": "An Access Control library for multi-tenant systems",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,3 +1,27 @@
+# [2.0.0](https://github.com/EndemolShineGroup/acl/compare/v1.1.2...v2.0.0) (2018-12-06)
+
+
+### Bug Fixes
+
+* **access control:** bunch of small fixes ([840eadd](https://github.com/EndemolShineGroup/acl/commit/840eadd))
+* **errors:** remove default value ([5dab9f4](https://github.com/EndemolShineGroup/acl/commit/5dab9f4))
+
+
+### Code Refactoring
+
+* **exports:** change named export to default export ([e5950e8](https://github.com/EndemolShineGroup/acl/commit/e5950e8))
+
+
+### Features
+
+* **resolvers:** create resolvers to normalise input ([aec5750](https://github.com/EndemolShineGroup/acl/commit/aec5750))
+
+
+### BREAKING CHANGES
+
+* **exports:** This was done so we can import as a default export
+instead of a named export
+
 ## [1.1.2](https://github.com/EndemolShineGroup/acl/compare/v1.1.1...v1.1.2) (2018-09-18)
 
 
