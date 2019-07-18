@@ -57,7 +57,7 @@
     "@types/lodash.uniq": "^4.5.4",
     "@types/node": "^10",
     "commitizen": "^3.0.2",
-    "husky": "^1",
+    "husky": "^3.0.1",
     "jest": "^23",
     "lint-staged": "^8.0.0",
     "prettier": "^1",
