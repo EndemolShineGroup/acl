@@ -48,7 +48,7 @@
     "@semantic-release/changelog": "^3",
     "@semantic-release/git": "^7",
     "@types/debug": "^0.0.31",
-    "@types/jest": "^23",
+    "@types/jest": "^25.1.2",
     "@types/lodash.clonedeep": "^4",
     "@types/lodash.foreach": "^4",
     "@types/lodash.isempty": "^4",
