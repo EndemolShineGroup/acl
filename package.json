@@ -37,7 +37,7 @@
     "lodash.omit": "^4",
     "lodash.uniq": "^4.5.0",
     "make-error": "^1",
-    "tslib": "^1.9.3"
+    "tslib": "^2.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^7",
